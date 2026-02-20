@@ -1,0 +1,11 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+  <div class="container">
+    <div class="collapse navbar-collapse show">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
+        <li class="nav-item" *ngFor="let c of categories">
+          <a class="nav-link" [routerLink]="['/category', c]" routerLinkActive="active">{{ c }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,11 @@
+<div class="card h-100 shadow-sm" appHighlight="#fff6f6">
+  <img [src]="item.image" class="card-img-top" alt="{{ item.name }}">
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title">{{ item.name }}</h5>
+    <p class="card-text text-muted small">{{ item.description }}</p>
+    <div class="mt-auto d-flex justify-content-between align-items-center">
+      <strong class="text-primary">${{ item.price.toFixed(2) }}</strong>
+      <button class="btn btn-sm btn-outline-primary" (click)="addToCart()">Add to cart</button>
+    </div>
+  </div>
+</div>

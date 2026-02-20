@@ -1,0 +1,14 @@
+:host { display: block; }
+
+.card-modern { border-radius: 14px; padding: 1.2rem; }
+
+.form-control-lg {
+  border-radius: 8px;
+  padding: .9rem 1rem;
+  border: 1px solid #eee;
+}
+
+.form-check-input:checked {
+  background: linear-gradient(90deg, var(--red-300), var(--red-400));
+  border-color: var(--red-400);
+}

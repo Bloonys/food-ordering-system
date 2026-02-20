@@ -1,0 +1,8 @@
+:host { display: block; }
+.nav-link { color: #444; }
+.nav-link.active {
+  color: #fff !important;
+  background: linear-gradient(90deg,#f04 0%,#a14 100%);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+}

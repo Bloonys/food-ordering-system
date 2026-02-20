@@ -1,0 +1,3 @@
+:host { display: block; }
+.card-img-top { height: 160px; object-fit: cover; }
+.card { border: 0; }

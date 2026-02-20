@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+.app-header {
+  backdrop-filter: blur(4px);
+}
+.navbar-brand {
+  text-decoration: none;
+}
