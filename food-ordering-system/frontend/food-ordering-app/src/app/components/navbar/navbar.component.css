@@ -3,7 +3,7 @@
 /* ====== SIDEBAR STYLING ====== */
 .sidebar-nav {
   width: 220px;
-  background: linear-gradient(180deg, #cb1f1f 0%, #c23333 100%);
+  background: linear-gradient(180deg, #e00808 0%, #c23333 100%);
   color: #fff;
   height: 100%;
   display: flex;
@@ -45,7 +45,7 @@
 
 .nav-item {
   margin: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .nav-link {

@@ -6,8 +6,19 @@
     </h6>
   </div>
 
-  <!-- Navigation items -->
+  <!-- all food items -->
   <ul class="nav-list">
+    <li class="nav-item" >
+    <a
+      class="nav-link"
+      routerLink="/" 
+      (click)="closeSidebar()"
+    >
+      <i class="bi bi-grid me-2" ></i>
+      <span class="nav-label">All Foods</span>
+    </a>
+  </li>
+  <!-- Navigation items -->
     <li class="nav-item" *ngFor="let c of categories">
       <a
         class="nav-link"

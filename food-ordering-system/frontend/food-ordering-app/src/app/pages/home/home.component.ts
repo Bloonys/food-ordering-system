@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   allItems: FoodItem[] = [
     { id: '1', name: 'Margherita', description: 'Classic cheese & tomato', price: 9.99, image: '/assets/pizza1.jpg', category: 'Pizzas', rating: 4.8 },
     { id: '2', name: 'Pepperoni', description: 'Spicy pepperoni & cheese', price: 11.99, image: '/assets/pizza2.jpg', category: 'Pizzas', rating: 4.9 },
-    { id: '3', name: 'BBQ Chicken', description: 'Grilled chicken with BBQ sauce', price: 12.5, image: '/assets/pizza3.jpg', category: 'Chicken', rating: 4.7 },
+    { id: '3', name: 'BBQ Chicken', description: 'BBQ Grilled chicken', price: 12.5, image: '/assets/pizza3.jpg', category: 'Chicken', rating: 4.7 },
     { id: '4', name: 'Veggie Delight', description: 'Mixed veggies & herbs', price: 10.5, image: '/assets/pizza4.jpg', category: 'Meals', rating: 4.6 },
     { id: '5', name: 'Fries', description: 'Crispy golden fries', price: 3.99, image: '/assets/pizza4.jpg', category: 'Sides', rating: 4.5 },
     { id: '6', name: 'Chocolate Cake', description: 'Decadent chocolate slice', price: 4.5, image: '/assets/pizza3.jpg', category: 'Desserts', rating: 4.8 },

@@ -3,14 +3,14 @@
 .card-modern {
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
+  background: #ffffff;
   border: 0;
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .card-modern:hover {
   transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 40px rgba(255, 139, 139, 0.12);
 }
 
 /* image region */
@@ -67,9 +67,9 @@
 
 /* button styling */
 .btn-red {
-  background: linear-gradient(90deg, var(--red-300), var(--red-400));
+  background: #da0b0b;
   border: none;
-  color: #fff;
+  color: #ffffff;
   font-weight: 700;
   transition: transform 200ms, box-shadow 200ms, filter 200ms;
 }
