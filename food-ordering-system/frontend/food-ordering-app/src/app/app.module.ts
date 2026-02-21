@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AppRoutingModule } from './app-routing.routes';
 
 import { App } from './app.component';
-import { AppRoutingModule } from './app.routes';
 
 import { HeaderComponent } from './components/header/header.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -14,6 +15,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { FoodListComponent } from './pages/food-list/food-list.component';
+import { FoodEditComponent } from './pages/food-edit/food-edit.component';
+import { FoodCreateComponent } from './pages/food-create/food-create.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,9 @@ import { ProfileComponent } from './pages/profile/profile.component';
     HomeComponent,
     LoginComponent,
     ProfileComponent,
+    FoodListComponent,
+    FoodEditComponent,
+    FoodCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +38,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     AppRoutingModule,
     HttpClientModule,
     RouterModule,
+    CommonModule,
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

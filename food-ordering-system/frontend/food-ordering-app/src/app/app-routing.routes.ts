@@ -4,11 +4,20 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { AuthGuard } from '.././guards/auth.guard';
+import { FoodListComponent } from './pages/food-list/food-list.component';
+import { FoodEditComponent } from './pages/food-edit/food-edit.component';
+import { FoodCreateComponent } from './pages/food-create/food-create.component';
+
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'category/:name', component: HomeComponent },
+  { path: 'foods', component: FoodListComponent },
+  { path: 'foods/edit/:id', component: FoodEditComponent },
+  { path: 'foods/create', component: FoodCreateComponent },
+
+
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // default to home
 

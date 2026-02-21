@@ -1,0 +1,9 @@
+<form (ngSubmit)="submit()" enctype="multipart/form-data">
+  <input [(ngModel)]="food.name" name="name" placeholder="Name">
+  <input [(ngModel)]="food.price" name="price" type="number">
+  <input [(ngModel)]="food.category" name="category">
+
+  <input type="file" (change)="onFileSelected($event)">
+
+  <button type="submit">Add</button>
+</form>
