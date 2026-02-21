@@ -1,0 +1,157 @@
+:root {
+  --red-50: #ffecec;
+  --red-100: #ffd6d6;
+  --red-300: #ff6b6b;
+  --red-400: #e64545;
+  --red-600: #c23333;
+  --red-800: #8f1f1f;
+  --card-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --transition: 250ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, #fff 0%, var(--red-50) 100%);
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Buttons */
+.btn-red {
+  background: linear-gradient(90deg, var(--red-300), var(--red-400));
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+}
+
+.btn-red:hover,
+.btn-red:focus {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+  box-shadow: 0 8px 22px rgba(197, 34, 34, 0.22);
+  color: #fff;
+}
+
+.btn-red:active {
+  transform: translateY(0);
+}
+
+/* button focus ring */
+.btn:focus,
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(226, 69, 69, 0.25);
+  outline: none;
+}
+
+/* card utilities */
+.card-modern {
+  border: 0;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+  overflow: hidden;
+  background: #fff;
+}
+
+.card-modern:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* images */
+.card-img-cover {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+}
+
+/* price formatting */
+.price {
+  font-weight: 800;
+  color: var(--red-600);
+  font-size: 1.1rem;
+}
+
+/* text brand */
+.text-brand {
+  color: var(--red-800);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* utility: min-vh-75 */
+.min-vh-75 {
+  min-height: 75vh;
+}
+
+/* Sidebar layout wrapper */
+.app-wrapper {
+  display: flex;
+  min-height: calc(100vh - 190px); /* Account for two-row header and footer */
+}
+
+/* Main content area takes remaining space */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #fff 0%, var(--red-50) 100%);
+  padding: 0;
+}
+
+/* smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Footer styling */
+.commercial-footer {
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+  color: #fff;
+  margin-top: 4rem;
+  border-top: 3px solid var(--red-400);
+}
+
+.commercial-footer a {
+  transition: color 200ms;
+}
+
+.commercial-footer a:hover {
+  color: var(--red-400) !important;
+}
+
+.commercial-footer h6 {
+  color: var(--red-400);
+}
+
+/* Main content area */
+main {
+  min-height: calc(100vh - 200px);
+}
+
+/* Container padding adjustments */
+.container {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}

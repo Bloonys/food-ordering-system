@@ -1,14 +1,195 @@
 :host { display: block; }
 
-.card-modern { border-radius: 14px; padding: 1.2rem; }
+.login-container {
+  background: linear-gradient(135deg, #ffafaf 0%, var(--red-50) 100%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  text-align: center;
+  align-items: center;      
+  justify-content: center;  
+  min-height: 60vh;
+}
 
-.form-control-lg {
+/* animated background shapes */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(144, 74, 74, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 8s ease-in-out infinite;
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(94, 29, 29, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(30px);
+  }
+}
+
+/* card styling */
+.card-modern {
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+  background: #ffffff;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  animation: scaleIn 500ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* header styling */
+.login-header {
+  position: relative;
+  color: #ffffff;
+}
+
+.login-header i {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.05);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* input styling */
+.login-input {
+  border: 1px solid #533636;
   border-radius: 8px;
-  padding: .9rem 1rem;
-  border: 1px solid #eee;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 250ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  background: #ffffff;
+}
+
+.login-input:focus {
+  background: #ffffff;
+  border-color: var(--red-400);
+  box-shadow: 0 0 0 0.2rem rgba(230, 69, 69, 0.1);
+}
+
+.login-input::placeholder {
+  color: #cabebe;
+}
+
+/* checkbox styling */
+.form-check-input {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid #ffffff;
+  border-radius: 4px;
+  transition: all 200ms;
+  cursor: pointer;
 }
 
 .form-check-input:checked {
   background: linear-gradient(90deg, var(--red-300), var(--red-400));
   border-color: var(--red-400);
+  box-shadow: 0 4px 12px rgba(230, 69, 69, 0.2);
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(230, 69, 69, 0.15);
+  border-color: var(--red-400);
+}
+
+/* button styling */
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.3rem;
+}
+
+.btn-red {
+  background: #ffc3c3;
+  border: none;
+  color: #3d0000;
+  font-weight: 700;
+  transition: transform 200ms, box-shadow 200ms, filter 200ms;
+}
+
+.btn-red:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+  box-shadow: 0 12px 28px rgba(81, 12, 12, 0.25);
+}
+
+.btn-red:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-red:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* form label */
+.form-label {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* responsive */
+@media (max-width: 576px) {
+  .login-header {
+    padding: .5rem !important;
+  }
+
+  .login-card {
+    margin: 1rem;
+  }
+
+  .p-4 {
+    padding: 1.25rem !important;
+  }
+}
+
+/* focus-visible for accessibility */
+.login-input:focus-visible,
+.btn:focus-visible,
+.form-check-input:focus-visible {
+  outline: 2px solid var(--red-400);
+  outline-offset: 2px;
 }

@@ -1,13 +1,51 @@
-<!-- App shell: persistent header and navigation, main area for routed pages, and a small footer -->
+<!-- App shell with header, sidebar, and main content area -->
 <app-header></app-header>
-<app-nav></app-nav>
 
-<main class="flex-grow-1 container py-3">
-	<!-- Routed pages will be injected here -->
-	<router-outlet></router-outlet>
-</main>
+<div class="app-wrapper">
+  <!-- Sidebar Navigation -->
+  <app-nav></app-nav>
 
-<footer class="text-center py-3 text-muted small">
-	&copy; SomehowPizza
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Routed pages will be injected here -->
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<footer class="commercial-footer">
+	<div class="container py-4">
+		<div class="row">
+			<div class="col-md-4 mb-3 mb-md-0">
+				<h6 class="fw-bold mb-2">About SomehowPizza</h6>
+				<p class="small text-muted mb-0">Delivering fresh, hot pizzas to your door since day one.</p>
+			</div>
+			<div class="col-md-4 mb-3 mb-md-0">
+				<h6 class="fw-bold mb-2">Quick Links</h6>
+				<ul class="list-unstyled small">
+					<li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+					<li><a href="#" class="text-decoration-none text-muted">Terms & Conditions</a></li>
+					<li><a href="#" class="text-decoration-none text-muted">Contact Us</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<h6 class="fw-bold mb-2">Follow Us</h6>
+				<div class="d-flex gap-2">
+					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Facebook">
+						<i class="bi bi-facebook"></i>
+					</a>
+					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Instagram">
+						<i class="bi bi-instagram"></i>
+					</a>
+					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Twitter">
+						<i class="bi bi-twitter-x"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<hr class="my-3">
+		<div class="text-center small text-muted">
+			&copy; 2026 SomehowPizza. All rights reserved.
+		</div>
+	</div>
 </footer>
 

@@ -1,11 +1,41 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-  <div class="container">
-    <div class="collapse navbar-collapse show">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-3">
-        <li class="nav-item" *ngFor="let c of categories">
-          <a class="nav-link" [routerLink]="['/category', c]" routerLinkActive="active">{{ c }}</a>
-        </li>
-      </ul>
-    </div>
+<nav class="sidebar-nav" [ngClass]="{ 'show': showSidebar }">
+  <!-- Sidebar header -->
+  <div class="sidebar-header">
+    <h6 class="fw-bold text-uppercase text-white" style="font-size: 0.8rem; letter-spacing: 1px;">
+      <i class="bi bi-list me-2"></i>Menu
+    </h6>
+  </div>
+
+  <!-- Navigation items -->
+  <ul class="nav-list">
+    <li class="nav-item" *ngFor="let c of categories">
+      <a
+        class="nav-link"
+        [routerLink]="['/category', c]"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }"
+        (click)="closeSidebar()"
+      >
+        <i class="bi me-2" [ngClass]="getCategoryIcon(c)"></i>
+        <span class="nav-label">{{ c }}</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Sidebar footer -->
+  <div class="sidebar-footer">
+    <div class="divider"></div>
+    <p class="small text-white-50 mb-0">
+      <i class="bi bi-info-circle me-1"></i>
+      Fresh & Hot
+    </p>
   </div>
 </nav>
+
+<!-- Mobile toggle button -->
+<button class="sidebar-toggle d-lg-none" (click)="toggleSidebar()">
+  <i class="bi bi-list"></i>
+</button>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay d-lg-none" [ngClass]="{ 'show': showSidebar }" (click)="closeSidebar()"></div>

@@ -1,19 +1,26 @@
-<header class="app-header bg-white shadow-sm py-2">
-  <div class="container-fluid position-relative d-flex align-items-center">
-    <div class="w-100 text-center">
-  <a class="navbar-brand fw-bold fs-4 text-dark" routerLink="/">SomehowPizza</a>
+<header class="app-header">
+  <div class="header-row container-fluid py-2 d-flex align-items-center justify-content-between">
+    
+    <!-- 左边 Brand Name -->
+    <div class="brand-name-container">
+      <a class="brand-link" routerLink="/">
+        <i class="bi bi-pizza brand-icon-small"></i>
+        <span class="brand-name">SomeHow♥Pizza</span>
+      </a>
     </div>
 
-    <div class="position-absolute end-0 pe-3">
-      <div class="d-flex align-items-center gap-2">
-        <a class="btn btn-light position-relative btn-sm" routerLink="#" aria-label="Cart">
-          <i class="bi bi-cart-fill"></i>
-          <span *ngIf="(cartCount$ | async) as c" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ c }}</span>
-        </a>
-        <a class="btn btn-outline-primary btn-sm" routerLink="/login" aria-label="Login">
-          <i class="bi bi-person-fill"></i>
-        </a>
-      </div>
+    <!-- 右边 Login + Cart 并排 -->
+    <div class="header-right d-flex align-items-center gap-2">
+      <a class="btn-icon-text" routerLink="/login">
+        <i class="bi bi-person-fill"></i>
+        <span class="action-label d-none d-sm-inline">Login</span>
+      </a>
+      <a class="btn-icon-text cart-button" routerLink="#">
+        <i class="bi bi-cart-fill"></i>
+        <span *ngIf="(cartCount$ | async) as c" class="cart-badge">{{ c }}</span>
+        <span class="action-label d-none d-sm-inline ms-1">Cart</span>
+      </a>
     </div>
+
   </div>
 </header>

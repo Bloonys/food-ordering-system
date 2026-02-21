@@ -1,3 +1,128 @@
-:host { display: block; }
-.card-img-top { height: 160px; object-fit: cover; }
-.card { border: 0; }
+:host { display: block; height: 100%; }
+
+.card-modern {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 0;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.card-modern:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* image region */
+.card-img-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 180px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+}
+
+.card-img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 300ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.card-modern:hover .card-img-cover {
+  transform: scale(1.08);
+}
+
+/* image overlay (rating badge) */
+.card-img-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  animation: slideInFade 400ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes slideInFade {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* body spacing */
+.p-3 {
+  padding: 1.25rem;
+}
+
+/* price formatting */
+.price {
+  color: var(--red-600);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* button styling */
+.btn-red {
+  background: linear-gradient(90deg, var(--red-300), var(--red-400));
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  transition: transform 200ms, box-shadow 200ms, filter 200ms;
+}
+
+.btn-red:hover {
+  transform: translateY(-2px);
+  filter: brightness(0.95);
+  box-shadow: 0 8px 22px rgba(197, 34, 34, 0.22);
+}
+
+.btn-red:active {
+  transform: translateY(0);
+}
+
+/* button pulse animation when added */
+.btn.active {
+  animation: pulse 300ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(226, 69, 69, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(226, 69, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(226, 69, 69, 0);
+  }
+}
+
+/* text utilities */
+.text-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* responsive adjustments */
+@media (max-width: 576px) {
+  .p-3 {
+    padding: 1rem;
+  }
+
+  .card-img-wrapper {
+    height: 150px;
+  }
+
+  .btn-sm {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+  }
+}
+

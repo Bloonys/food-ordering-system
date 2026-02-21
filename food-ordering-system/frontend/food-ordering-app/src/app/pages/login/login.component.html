@@ -1,22 +1,87 @@
-<div class="d-flex align-items-center justify-content-center min-vh-100">
-  <div class="card p-4 shadow-sm" style="max-width: 400px; width: 100%">
-    <h4 class="mb-3 text-center">Login</h4>
-    <form>
+<section class="login-container min-vh-75 d-flex align-items-center justify-content-center py-4 py-md-5">
+  <div class="card card-modern login-card" style="max-width: 420px; width: 100%; animation: scaleIn 500ms cubic-bezier(.2,.9,.3,1) both;">
+    <!-- Header -->
+    <div class="login-header text-center p-4 p-md-5" style="background: linear-gradient(135deg, var(--red-400) 0%, var(--red-600) 100%); color: #fff;">
       <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" placeholder="you@example.com">
+        <i class="bi bi-pizza" style="font-size: 2.5rem;"></i>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-control" placeholder="Password">
+      <h3 class="fw-bold mb-2" style="color: #000;">Welcome Back</h3>
+      <p class="mb-0 small" style="color: #000;">Please enter your details</p>
+    </div>
+
+    <!-- Form -->
+    <div class="p-4 p-md-5">
+      <form #loginForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Email field -->
+        <div class="mb-4">
+          <label for="email" class="form-label small fw-semibold mb-2" style="color: #222;"></label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            class="form-control form-control-lg login-input"
+            placeholder="Username"
+            ngModel
+            #email="ngModel"
+          />
+          <small *ngIf="email.invalid && (email.dirty || email.touched)" class="d-block text-danger mt-2">
+          </small>
+        </div>
+
+        <!-- Password field -->
+        <div class="mb-4">
+          <label for="password" class="form-label small fw-semibold mb-2" style="color: #222;"></label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minlength="6"
+            class="form-control form-control-lg login-input"
+            placeholder="Password"
+            ngModel
+            #pwd="ngModel"
+          />
+          <small *ngIf="pwd.invalid && (pwd.dirty || pwd.touched)" class="d-block text-danger mt-2">
+          </small>
+        </div>
+
+        <!-- Remember me -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="remember" name="remember" ngModel>
+            <label class="form-check-label small" for="remember">Remember me</label>
+          </div>
+          <a href="#" class="small text-decoration-none fw-semibold" style="color: var(--red-600);">Forgot password?</a>
+        </div>
+
+        <!-- Submit button -->
+        <div class="d-grid mb-4">
+          <button
+            class="btn btn-red btn-lg fw-bold"
+            type="submit"
+            [disabled]="loginForm.invalid"
+            style="transition: all 200ms cubic-bezier(.2,.9,.3,1);">
+            <i class="bi bi-lock-fill me-2"></i>Sign In
+          </button>
+        </div>
+      </form>
+
+      <!-- Sign up link -->
+      <div class="text-center">
+        <p class="text-muted small mb-0">
+          Don't have an account?
+          <a routerLink="#" class="text-decoration-none fw-semibold" style="color: var(--red-600);">Create one</a>
+        </p>
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="remember">
-        <label class="form-check-label" for="remember">Remember me</label>
-      </div>
-      <div class="d-grid">
-        <button class="btn btn-primary">Login</button>
-      </div>
-    </form>
+    </div>
+
+    <!-- Footer divider -->
+    <div class="text-center py-3 border-top" style="background: #fafafa;">
+      <small class="text-muted">
+        <i class="bi bi-shield-lock me-1"></i>Secure login • Your data is protected
+      </small>
+    </div>
   </div>
-</div>
+</section>

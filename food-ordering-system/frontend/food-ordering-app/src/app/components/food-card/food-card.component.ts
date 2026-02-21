@@ -13,6 +13,14 @@ export class FoodCardComponent {
 
   constructor(private cart: CartService) {}
 
+  toggleSelected() {
+    if (!this.item) return;
+    this.item.selected = !this.item.selected;
+    if (this.item.selected) {
+      this.cart.addItem(this.item, 1);
+    }
+  }
+
   addToCart() {
     if (!this.item) return;
     this.cart.addItem(this.item, 1);

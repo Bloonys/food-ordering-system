@@ -5,4 +5,6 @@ export interface FoodItem {
   price: number;
   image?: string;
   category?: string;
+  selected?: boolean;
+  rating?: number;
 }

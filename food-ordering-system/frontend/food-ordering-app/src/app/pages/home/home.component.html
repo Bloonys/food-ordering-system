@@ -1,7 +1,42 @@
-<section>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <div class="col" *ngFor="let it of items">
+<section class="home-container">
+  <!-- Page Header with Title -->
+  <div class="home-header">
+    <div class="header-content">
+      <h1 class="page-title fw-900">
+        <span class="text-gradient">Explore Our Menu</span>
+      </h1>
+      <p class="page-subtitle">
+        &nbsp;Fresh, delicious pizzas and more. {{ items.length }} items available
+      </p>
+    </div>
+
+    <!-- Filter and Sort Controls -->
+    <div class="filter-controls">
+      <div class="search-box">
+        <input type="text" class="form-control" placeholder="Search items...">
+      </div>
+      <div class="sort-buttons">
+        <button class="btn btn-sm btn-outline-danger" (click)="sortBy='price'">
+          <i class="bi bi-sort-up me-1"></i>Price
+        </button>
+        <button class="btn btn-sm btn-outline-danger" (click)="sortBy='rating'">
+          <i class="bi bi-star me-1"></i>Top Rated
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid">
+    <div class="grid-item" *ngFor="let it of items; let i = index" [ngStyle]="{ 'animation-delay': (i * 50) + 'ms' }">
       <app-food-card [item]="it"></app-food-card>
     </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="items.length === 0" class="empty-state">
+    <i class="bi bi-inbox"></i>
+    <h5>No items found</h5>
+    <p>Check back soon for more delicious options</p>
   </div>
 </section>
