@@ -17,9 +17,17 @@ app.use(cors({
 // Parse JSON request bodies
 app.use(express.json());
 
+//food 
 const foodRoutes = require("./routes/foodRoutes");
 
 app.use("/api/foods", foodRoutes);
+
+// Serve uploaded images from the 'uploads' directory
+const path = require('path');
+
+// 替换 app.js 里的那行
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
 // ===== DATABASE INITIALIZATION =====
 // Sync Sequelize models with database
 // This will create tables if they don't exist
