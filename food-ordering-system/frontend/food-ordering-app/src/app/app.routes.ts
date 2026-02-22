@@ -7,7 +7,7 @@ import { AuthGuard } from '.././guards/auth.guard';
 import { FoodListComponent } from './pages/food-list/food-list.component';
 import { FoodEditComponent } from './pages/food-edit/food-edit.component';
 import { FoodCreateComponent } from './pages/food-create/food-create.component';
-
+import { FoodAdminComponent } from './pages/food-admin/food-admin.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -16,6 +16,7 @@ export const routes: Routes = [
   { path: 'foods', component: FoodListComponent },
   { path: 'foods/edit/:id', component: FoodEditComponent },
   { path: 'foods/create', component: FoodCreateComponent },
+  { path: 'admin/foods', component: FoodAdminComponent },
 
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <h2>Food Management</h2>
+
+  <!-- Form -->
+  <div class="card p-3 mb-4">
+    <h5>{{ editing ? 'Edit' : 'Add' }} Food</h5>
+
+    <input [(ngModel)]="form.name" placeholder="Name" class="form-control mb-2">
+    <input [(ngModel)]="form.price" type="number" placeholder="Price" class="form-control mb-2">
+    <input [(ngModel)]="form.category" placeholder="Category" class="form-control mb-2">
+
+    <button class="btn btn-primary" (click)="save()">
+      {{ editing ? 'Update' : 'Add' }}
+    </button>
+    <button *ngIf="editing" class="btn btn-secondary ms-2" (click)="cancel()">Cancel</button>
+  </div>
+
+  <!-- Table -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th><th>Price</th><th>Category</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let food of foods">
+        <td>{{ food.name }}</td>
+        <td>{{ food.price }}</td>
+        <td>{{ food.category }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning" (click)="edit(food)">Edit</button>
+          <button class="btn btn-sm btn-danger ms-2" (click)="delete(food.id!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

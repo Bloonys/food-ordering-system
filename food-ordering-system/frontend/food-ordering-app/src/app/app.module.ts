@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AppRoutingModule } from './app-routing.routes';
+import { AppRoutingModule } from './app.routes';
 
 import { App } from './app.component';
 
@@ -18,6 +18,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { FoodListComponent } from './pages/food-list/food-list.component';
 import { FoodEditComponent } from './pages/food-edit/food-edit.component';
 import { FoodCreateComponent } from './pages/food-create/food-create.component';
+import { FoodAdminComponent } from './pages/food-admin/food-admin.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { FoodCreateComponent } from './pages/food-create/food-create.component';
     FoodListComponent,
     FoodEditComponent,
     FoodCreateComponent,
+    FoodAdminComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { FoodService } from '../../services/food.service';
-import { Food } from '../../models/food.model';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-food-create',
   standalone: false,
-
   templateUrl: './food-create.component.html'
 })
 export class FoodCreateComponent {

@@ -27,11 +27,10 @@ export class CartService {
     this.itemsSubject.next(items);
   }
 
-  removeItem(itemId: string) {
-    const items = this.itemsSubject.value.filter(e => e.item.id !== itemId);
-    this.itemsSubject.next(items);
-  }
-
+  removeItem(itemId: number) {
+  const items = this.itemsSubject.value.filter(e => e.item.id !== itemId);
+  this.itemsSubject.next(items);
+}
   clear() {
     this.itemsSubject.next([]);
   }
