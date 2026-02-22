@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import type { FoodItem } from '../../models/food-item.interface';
 import { CartService } from '../../services/cart.service';
+import { environment } from '../../../enviroments/enviroment';
 
 @Component({
   selector: 'app-food-card',
@@ -9,6 +10,7 @@ import { CartService } from '../../services/cart.service';
   styleUrls: ['./food-card.component.css']
 })
 export class FoodCardComponent {
+  environment = environment;
   @Input() item!: FoodItem;
 
   constructor(private cart: CartService) {}
