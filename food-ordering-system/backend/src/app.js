@@ -17,6 +17,9 @@ app.use(cors({
 // Parse JSON request bodies
 app.use(express.json());
 
+const foodRoutes = require("./routes/foodRoutes");
+
+app.use("/api/foods", foodRoutes);
 // ===== DATABASE INITIALIZATION =====
 // Sync Sequelize models with database
 // This will create tables if they don't exist
@@ -79,3 +82,4 @@ app.listen(PORT, () => {
   console.log(`   - Login: POST http://localhost:${PORT}/auth/login`);
   console.log(`   - Profile: GET http://localhost:${PORT}/auth/profile (requires token)\n`);
 });
+
