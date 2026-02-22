@@ -4,12 +4,13 @@ const Food = require('../models/food');
 exports.createFood = async (req, res) => {
   try {
     const { name, price, category } = req.body;
-    const image = req.file ? req.file.filename : null;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     const food = await Food.create({ name, price, category, image });
 
     res.json(food);
   } catch (err) {
+    console.error(err); 
     res.status(500).json({ error: 'Failed to create food' });
   }
 };

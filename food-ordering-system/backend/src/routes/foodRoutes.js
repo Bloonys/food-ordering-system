@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const foodController = require('../controllers/foodController');
+const multer = require('multer');
+const upload = require('../middleware/upload'); 
 
+router.post('/', upload.single('image'), foodController.createFood);
+router.put('/:id', upload.single('image'), foodController.updateFood);
 router.get('/', foodController.getFoods);
-router.post('/', foodController.createFood);
 router.get('/:id', foodController.getFoodById);
-router.put('/:id', foodController.updateFood);
 router.delete('/:id', foodController.deleteFood);
 
 module.exports = router;
