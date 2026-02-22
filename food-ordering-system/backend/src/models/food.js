@@ -17,7 +17,11 @@ const Food = sequelize.define('Food', {
   image: {
     type: DataTypes.STRING,
       allowNull: true
-  }
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
 }, {
   tableName: 'foods',
   timestamps: true,
