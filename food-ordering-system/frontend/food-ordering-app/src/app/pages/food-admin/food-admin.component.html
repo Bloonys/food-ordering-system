@@ -1,130 +1,112 @@
-<div class="admin-wrapper">
-
-  <h2 class="page-title">🍕 Food Management</h2>
-
-  <!-- FORM CARD -->
-  <div class="form-card">
-
-    <h4 class="form-title">
-      {{ editing ? '✏️ Edit Food' : '➕ Add New Food' }}
-    </h4>
-
-    <form #foodForm="ngForm" (ngSubmit)="save()" novalidate>
-
-      <div class="form-grid">
-
-        <!-- NAME -->
-        <input [(ngModel)]="form.name"
-               name="name"
-               required
-               placeholder="Food Name"
-               class="form-input">
-
-        <div class="error"
-             *ngIf="foodForm.controls['name']?.invalid && foodForm.controls['name']?.touched">
-          Name is required
-        </div>
-
-        <!-- PRICE -->
-        <input [(ngModel)]="form.price"
-               name="price"
-               type="number"
-               required
-               min="1"
-               placeholder="Price"
-               class="form-input">
-
-        <div class="error"
-             *ngIf="foodForm.controls['price']?.invalid && foodForm.controls['price']?.touched">
-          Price must be greater than 0
-        </div>
-
-        <!-- CATEGORY -->
-        <input [(ngModel)]="form.category"
-               name="category"
-               required
-               placeholder="Category"
-               class="form-input">
-
-        <div class="error"
-             *ngIf="foodForm.controls['category']?.invalid && foodForm.controls['category']?.touched">
-          Category is required
-        </div>
-
-        <!-- DESCRIPTION -->
-        <textarea [(ngModel)]="form.description"
-                  name="description"
-                  placeholder="Description"
-                  class="form-input textarea"></textarea>
-
-        <!-- FILE -->
-        <input type="file"
-               (change)="onFileSelected($event)"
-               class="form-input">
-
+<div class="premium-wrapper animate-in">
+  
+  <header class="main-header">
+    <div class="title-group">
+      <span class="badge-accent">Admin Portal</span>
+      <h1>Kitchen <span class="text-gradient">Command Center</span></h1>
+    </div>
+    <div class="stats-overview">
+      <div class="stat-pill">
+        <span class="label">Items：</span>
+        <span class="value">{{ foods.length }}</span>
       </div>
+    </div>
+  </header>
 
-      <div class="form-actions">
+  <div class="main-grid">
+    
+    <section class="editor-section">
+      <div class="neon-card">
+        <div class="card-inner">
+          <div class="card-head">
+            <div class="icon-box">
+              <i class="bi" [ngClass]="editing ? 'bi-stars' : 'bi-plus-lg'"></i>
+            </div>
+            <h3>{{ editing ? 'Update Item' : 'New Dish' }}</h3>
+          </div>
 
-        <button type="submit"
-                class="btn-primary"
-                [disabled]="foodForm.invalid">
-          {{ editing ? 'Update Food' : 'Add Food' }}
-        </button>
+          <form #foodForm="ngForm" (ngSubmit)="save()" class="premium-form">
+            <div class="input-container">
+              <label>Dish Name</label>
+              <input [(ngModel)]="form.name" name="name" required placeholder="Signature Pizza...">
+            </div>
 
-        <button *ngIf="editing"
-                type="button"
-                class="btn-secondary"
-                (click)="cancel()">
-          Cancel
-        </button>
+            <div class="row">
+              <div class="input-container">
+                <label>Price</label>
+                <div class="price-input">
+                  <span>$</span>
+                  <input [(ngModel)]="form.price" name="price" type="number" required>
+                </div>
+              </div>
+              <div class="input-container">
+                <label>Category</label>
+                <select [(ngModel)]="form.category" name="category" required>
+                  <option value="" disabled>Select...</option>
+                  <option value="Pizzas">Pizzas</option>
+                  <option value="Chicken">Chicken</option>
+                  <option value="Sides">Sides</option>
+                  <option value="Desserts">Desserts</option>
+                  <option value="Drinks">Drinks</option>
+                  <option value="Meals">Meals</option>
+                </select>
+              </div>
+            </div>
 
+            <div class="input-container">
+              <label>Description</label>
+              <textarea [(ngModel)]="form.description" name="description" rows="2"></textarea>
+            </div>
+
+            <div class="file-drop-zone">
+              <input type="file" (change)="onFileSelected($event)" id="p-file">
+              <label for="p-file">
+                <span>{{ selectedFile ? selectedFile.name : ' ' }}</span>
+              </label>
+            </div>
+            <br>
+
+            <div class="button-group">
+              <button type="submit" class="btn-submit" [disabled]="foodForm.invalid">
+                {{ editing ? 'Update Product' : 'Add to Menu' }}
+              </button>
+              <button *ngIf="editing" type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
+    </section>
 
-    </form>
+    <section class="list-section">
+      <div class="section-title">Active Menu Items</div>
+      
+      <div class="item-stack">
+        <div class="glass-item" *ngFor="let food of foods; let i = index" [style.animation-delay]="i * 0.05 + 's'">
+          <div class="item-visual">
+            <div class="placeholder-img">{{ food.name[0] }}</div>
+          </div>
+          <div class="item-content">
+            <div class="top-row">
+              <span class="name">{{ food.name }}</span>
+              <span class="price">${{ food.price }}</span>
+            </div>
+            <div class="bottom-row">
+              <span class="cat-tag">{{ food.category }}</span>
+              <p class="desc">{{ food.description }}</p>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="action-btn edit" (click)="edit(food)"><i class="bi bi-pencil-fill"></i></button>
+            <button class="action-btn del" (click)="delete(food.id!)"><i class="bi bi-trash3-fill"></i></button>
+          </div>
+        </div>
+        
+        <div class="empty-state" *ngIf="foods.length === 0">
+          <i class="bi bi-inbox"></i>
+          <p>The kitchen is quiet...</p>
+        </div>
+      </div>
+    </section>
+
   </div>
-
-  <!-- TABLE CARD -->
-  <div class="table-card">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Category</th>
-          <th>Description</th>
-          <th style="width:150px">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let food of foods">
-          <td>{{ food.name }}</td>
-          <td>$ {{ food.price }}</td>
-          <td>{{ food.category }}</td>
-          <td class="desc">{{ food.description }}</td>
-          <td>
-            <button class="btn-edit"
-                    type="button"
-                    (click)="edit(food)">
-              Edit
-            </button>
-
-            <button class="btn-delete"
-                    type="button"
-                    (click)="delete(food.id!)">
-              Delete
-            </button>
-          </td>
-        </tr>
-
-        <tr *ngIf="foods.length === 0">
-          <td colspan="5" class="empty">
-            No food items found.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
 </div>

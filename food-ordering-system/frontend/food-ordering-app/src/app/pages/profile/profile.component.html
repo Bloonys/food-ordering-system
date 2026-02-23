@@ -1,43 +1,85 @@
-<div class="profile-container" *ngIf="user">
-  <div class="profile-card">
-    <h2>User Profile</h2>
-
-    <div class="profile-row">
-      <span>Username</span>
-      <strong>{{ user.username }}</strong>
+<div class="console-wrapper">
+  <div class="console-header">
+    <div class="breadcrumb">Account / <span class="active">Settings</span></div>
+    <div class="user-meta-header" *ngIf="user">
+      <span class="role-chip" [attr.data-role]="user.role">{{ user.role }}</span>
     </div>
+  </div>
 
-    <div class="profile-row">
-      <span>Email</span>
-      <strong>{{ user.email }}</strong>
-    </div>
+  <div class="console-layout">
+    <aside class="console-sidebar">
+      <nav>
+        <a class="nav-link active"><i class="bi bi-person"></i> General</a>
+        <a class="nav-link"><i class="bi bi-geo-alt"></i> Addresses</a>
+        <a class="nav-link"><i class="bi bi-credit-card"></i> Billing</a>
+        <a class="nav-link"><i class="bi bi-shield-lock"></i> Security</a>
+      </nav>
 
-    <div class="profile-row">
-      <span>Role</span>
-      <strong 
-        [ngClass]="{
-          'admin-role': user.role === 'admin',
-          'user-role': user.role !== 'admin'
-        }">
-        {{ user.role }}
-      </strong>
-    </div>
+      <div class="sidebar-footer">
+        <button class="logout-link" (click)="logout()">
+          <i class="bi bi-box-arrow-left"></i> Sign out
+        </button>
+      </div>
+    </aside>
 
-    <div class="profile-row">
-      <span>Joined</span>
-      <strong>{{ user.created_at | date:'medium' }}</strong>
-    </div>
+    <main class="console-body" *ngIf="user">
+      
+      <section class="settings-group">
+        <h3 class="group-title">Public Profile</h3>
+        <div class="settings-card">
+          <div class="profile-header-flex">
+            <div class="avatar-static">{{ user.username[0] | uppercase }}</div>
+            <div class="header-text">
+              <h4>{{ user.username }}</h4>
+              <p>Member since {{ user.created_at | date:'MMMM yyyy' }}</p>
+            </div>
+            <button *ngIf="user.role === 'admin'" 
+                    routerLink="/admin/foods" 
+                    class="btn-console-primary">
+              Admin Panel
+            </button>
+          </div>
+        </div>
+      </section>
 
-    <div class="profile-actions">
-      <button *ngIf="user.role === 'admin'" 
-              class="admin-btn"
-              routerLink="/admin/foods">
-        Go to Admin Panel
-      </button>
+      <section class="settings-group">
+        <h3 class="group-title">Account Details</h3>
+        <div class="settings-card no-padding">
+          <div class="data-row">
+            <span class="label">Email address</span>
+            <span class="value">{{ user.email }}</span>
+          </div>
+          <div class="data-row">
+            <span class="label">Username</span>
+            <span class="value">@{{ user.username }}</span>
+          </div>
+        </div>
+      </section>
 
-      <button class="logout-btn" (click)="logout()">
-        Logout
-      </button>
-    </div>
+      <div class="split-rows">
+        <section class="settings-group">
+          <h3 class="group-title">Shipping Address</h3>
+          <div class="settings-card address-box">
+            <div class="empty-notif">
+              <i class="bi bi-house-door"></i>
+              <span>No addresses saved yet.</span>
+              <button class="text-btn">+ Add</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <h3 class="group-title">Default Payment</h3>
+          <div class="settings-card payment-box">
+            <div class="empty-notif">
+              <i class="bi bi-credit-card"></i>
+              <span>No payment methods.</span>
+              <button class="text-btn">+ Add</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
   </div>
 </div>
