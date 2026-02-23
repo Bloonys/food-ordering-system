@@ -1,27 +1,40 @@
-<h2>🛒 Shopping Cart</h2>
+<div class="cart-container">
+  <h2>您的购物车</h2>
 
-<div *ngFor="let item of cart.getItems()">
-  <div>
-    <strong>{{ item.food.name }}</strong>
+  <div *ngIf="(cart.items$ | async) as items; else loading">
+    
+    <div *ngIf="items.length === 0" class="empty-cart">
+      <p>购物车空空如也，快去去点餐吧！</p>
+    </div>
+
+    <div *ngFor="let entry of items" class="cart-item">
+      <div class="item-info">
+        <strong>{{ entry.food.name }}</strong>
+        <p>单价: {{ entry.food.price | currency }}</p>
+      </div>
+
+      <div class="item-controls">
+        <span>数量: {{ entry.quantity }}</span>
+        
+        <button (click)="cart.removeItem(entry.food.id)" class="btn-remove">
+          删除
+        </button>
+      </div>
+    </div>
+
+    <hr *ngIf="items.length > 0" />
+
+    <div *ngIf="items.length > 0" class="cart-summary">
+      <h3>总计: {{ cart.getTotal() | currency }}</h3>
+      
+      <div class="actions">
+        <button (click)="cart.clear()" class="btn-clear">清空购物车</button>
+        <button class="btn-checkout">去结算</button>
+      </div>
+    </div>
   </div>
 
-  <div>
-    Quantity: {{ item.quantity }}
-  </div>
-
-  <div>
-    Price: {{ item.food.price | currency }}
-  </div>
-
-  <button (click)="cart.removeItem(item.food.id)">
-    Remove
-  </button>
-
-  <hr>
+  <ng-template #loading>
+    <p>正在加载购物车...</p>
+  </ng-template>
 </div>
-
-<h3>Total: {{ cart.getTotal() | currency }}</h3>
-
-<button (click)="cart.clear()">
-  Clear Cart
-</button>

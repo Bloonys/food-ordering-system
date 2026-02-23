@@ -12,6 +12,6 @@ export class HeaderComponent {
   readonly cartCount$;
 
   constructor(private cart: CartService) {
-    this.cartCount$ = this.cart.items$.pipe(map(items => items.reduce((s, e) => s + e.qty, 0)));
+    this.cartCount$ = this.cart.items$.pipe(map(items => items.reduce((s, e) => s + e.quantity, 0)));
   }
 }
