@@ -28,7 +28,15 @@ export class LoginComponent {
         // 保存 token
         localStorage.setItem('token', res.token);
 
-        this.router.navigate(['/profile']);
+        // 保存 role（方便前端判断）
+        localStorage.setItem('role', res.user.role);
+
+        // 根据角色跳转
+        if (res.user.role === 'admin') {
+          this.router.navigate(['/admin/foods']);
+        } else {
+          this.router.navigate(['/profile']);
+        }
       },
       error: (err) => {
         console.error(err);

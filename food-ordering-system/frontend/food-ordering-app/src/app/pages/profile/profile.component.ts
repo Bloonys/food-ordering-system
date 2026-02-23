@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
   selector: 'app-profile',
   standalone: false,
   templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
 

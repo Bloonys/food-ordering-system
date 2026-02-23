@@ -13,7 +13,8 @@ export class FoodEditComponent implements OnInit {
   food: Food = {
     name: '',
     price: 0,
-    category: ''
+    category: '',
+    description: ''
   };
 
   file: File | null = null;
@@ -42,6 +43,7 @@ export class FoodEditComponent implements OnInit {
     formData.append('name', this.food.name);
     formData.append('price', this.food.price.toString());
     formData.append('category', this.food.category);
+    formData.append('description', this.food.description || '');
 
     if (this.file) {
       formData.append('image', this.file);

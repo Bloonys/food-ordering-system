@@ -1,37 +1,130 @@
-<div class="container mt-4">
-  <h2>Food Management</h2>
+<div class="admin-wrapper">
 
-  <!-- Form -->
-  <div class="card p-3 mb-4">
-    <h5>{{ editing ? 'Edit' : 'Add' }} Food</h5>
+  <h2 class="page-title">🍕 Food Management</h2>
 
-    <input [(ngModel)]="form.name" placeholder="Name" class="form-control mb-2">
-    <input [(ngModel)]="form.price" type="number" placeholder="Price" class="form-control mb-2">
-    <input [(ngModel)]="form.category" placeholder="Category" class="form-control mb-2">
+  <!-- FORM CARD -->
+  <div class="form-card">
 
-    <button class="btn btn-primary" (click)="save()">
-      {{ editing ? 'Update' : 'Add' }}
-    </button>
-    <button *ngIf="editing" class="btn btn-secondary ms-2" (click)="cancel()">Cancel</button>
+    <h4 class="form-title">
+      {{ editing ? '✏️ Edit Food' : '➕ Add New Food' }}
+    </h4>
+
+    <form #foodForm="ngForm" (ngSubmit)="save()" novalidate>
+
+      <div class="form-grid">
+
+        <!-- NAME -->
+        <input [(ngModel)]="form.name"
+               name="name"
+               required
+               placeholder="Food Name"
+               class="form-input">
+
+        <div class="error"
+             *ngIf="foodForm.controls['name']?.invalid && foodForm.controls['name']?.touched">
+          Name is required
+        </div>
+
+        <!-- PRICE -->
+        <input [(ngModel)]="form.price"
+               name="price"
+               type="number"
+               required
+               min="1"
+               placeholder="Price"
+               class="form-input">
+
+        <div class="error"
+             *ngIf="foodForm.controls['price']?.invalid && foodForm.controls['price']?.touched">
+          Price must be greater than 0
+        </div>
+
+        <!-- CATEGORY -->
+        <input [(ngModel)]="form.category"
+               name="category"
+               required
+               placeholder="Category"
+               class="form-input">
+
+        <div class="error"
+             *ngIf="foodForm.controls['category']?.invalid && foodForm.controls['category']?.touched">
+          Category is required
+        </div>
+
+        <!-- DESCRIPTION -->
+        <textarea [(ngModel)]="form.description"
+                  name="description"
+                  placeholder="Description"
+                  class="form-input textarea"></textarea>
+
+        <!-- FILE -->
+        <input type="file"
+               (change)="onFileSelected($event)"
+               class="form-input">
+
+      </div>
+
+      <div class="form-actions">
+
+        <button type="submit"
+                class="btn-primary"
+                [disabled]="foodForm.invalid">
+          {{ editing ? 'Update Food' : 'Add Food' }}
+        </button>
+
+        <button *ngIf="editing"
+                type="button"
+                class="btn-secondary"
+                (click)="cancel()">
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
   </div>
 
-  <!-- Table -->
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th><th>Price</th><th>Category</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let food of foods">
-        <td>{{ food.name }}</td>
-        <td>{{ food.price }}</td>
-        <td>{{ food.category }}</td>
-        <td>
-          <button class="btn btn-sm btn-warning" (click)="edit(food)">Edit</button>
-          <button class="btn btn-sm btn-danger ms-2" (click)="delete(food.id!)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- TABLE CARD -->
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th style="width:150px">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let food of foods">
+          <td>{{ food.name }}</td>
+          <td>$ {{ food.price }}</td>
+          <td>{{ food.category }}</td>
+          <td class="desc">{{ food.description }}</td>
+          <td>
+            <button class="btn-edit"
+                    type="button"
+                    (click)="edit(food)">
+              Edit
+            </button>
+
+            <button class="btn-delete"
+                    type="button"
+                    (click)="delete(food.id!)">
+              Delete
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="foods.length === 0">
+          <td colspan="5" class="empty">
+            No food items found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>

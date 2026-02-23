@@ -16,7 +16,8 @@ export class FoodAdminComponent implements OnInit {
   form: Food = {
     name: '',
     price: 0,
-    category: ''
+    category: '',
+    description: ''
   };
 
   selectedFile: File | null = null;
@@ -53,29 +54,48 @@ export class FoodAdminComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  save(): void {
-    const formData = new FormData();
+save(): void {
 
-    formData.append('name', this.form.name);
-    formData.append('price', String(this.form.price));
-    formData.append('category', this.form.category);
-
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
-
-    if (this.editing) {
-      this.foodService.updateFood(this.editing.id!, formData).subscribe(() => {
-        this.loadFoods();
-        this.cancel();
-      });
-    } else {
-      this.foodService.createFood(formData).subscribe(() => {
-        this.loadFoods();
-        this.cancel();
-      });
-    }
+  // === 校验 ===
+  if (!this.form.name.trim()) {
+    alert('Name is required');
+    return;
   }
+
+  if (!this.form.category.trim()) {
+    alert('Category is required');
+    return;
+  }
+
+  if (this.form.price === null || this.form.price === undefined || this.form.price <= 0) {
+    alert('Price must be greater than 0');
+    return;
+  }
+  // === 校验结束 ===
+
+  const formData = new FormData();
+
+  formData.append('name', this.form.name);
+  formData.append('price', String(this.form.price));
+  formData.append('category', this.form.category);
+  formData.append('description', this.form.description || '');
+
+  if (this.selectedFile) {
+    formData.append('image', this.selectedFile);
+  }
+
+  if (this.editing) {
+    this.foodService.updateFood(this.editing.id!, formData).subscribe(() => {
+      this.loadFoods();
+      this.cancel();
+    });
+  } else {
+    this.foodService.createFood(formData).subscribe(() => {
+      this.loadFoods();
+      this.cancel();
+    });
+  }
+}
 
   delete(id: number): void {
     if (confirm('Delete item?')) {

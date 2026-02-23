@@ -1,10 +1,43 @@
-<div *ngIf="user">
-  <h2>User Profile</h2>
+<div class="profile-container" *ngIf="user">
+  <div class="profile-card">
+    <h2>User Profile</h2>
 
-  <p><strong>Username:</strong> {{ user.username }}</p>
-  <p><strong>Email:</strong> {{ user.email }}</p>
-  <p><strong>Role:</strong> {{ user.role }}</p>
-  <p><strong>Created At:</strong> {{ user.created_at }}</p>
+    <div class="profile-row">
+      <span>Username</span>
+      <strong>{{ user.username }}</strong>
+    </div>
 
-  <button (click)="logout()">Logout</button>
+    <div class="profile-row">
+      <span>Email</span>
+      <strong>{{ user.email }}</strong>
+    </div>
+
+    <div class="profile-row">
+      <span>Role</span>
+      <strong 
+        [ngClass]="{
+          'admin-role': user.role === 'admin',
+          'user-role': user.role !== 'admin'
+        }">
+        {{ user.role }}
+      </strong>
+    </div>
+
+    <div class="profile-row">
+      <span>Joined</span>
+      <strong>{{ user.created_at | date:'medium' }}</strong>
+    </div>
+
+    <div class="profile-actions">
+      <button *ngIf="user.role === 'admin'" 
+              class="admin-btn"
+              routerLink="/admin/foods">
+        Go to Admin Panel
+      </button>
+
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </div>
 </div>
