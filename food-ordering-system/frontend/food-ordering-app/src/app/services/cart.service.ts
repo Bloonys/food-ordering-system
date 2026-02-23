@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import type { FoodItem } from '../models/food-item.interface';
 
-// 1. 统一接口定义，确保与 HTML 模板中的 item.food 和 item.quantity 一致
+// 1. define CartEntry to represent an item in the cart (food + quantity)
 export interface CartEntry {
   food: FoodItem;
   quantity: number;
@@ -10,54 +10,54 @@ export interface CartEntry {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  // 使用 BehaviorSubject 管理购物车状态
+  // manage cart items with BehaviorSubject to allow components to subscribe and react to changes
   private itemsSubject = new BehaviorSubject<CartEntry[]>([]);
-  
-  // 暴露为 Observable 供组件使用 async 管道订阅
+
+  // expose as Observable for components to use async pipe
   items$ = this.itemsSubject.asObservable();
 
   constructor() {}
 
-  // 获取当前购物车快照
+  // get current cart items
   getItems(): CartEntry[] {
     return this.itemsSubject.value;
   }
 
-  // 添加商品
+  // add item to cart
   addItem(food: FoodItem, quantity = 1) {
     const items = [...this.itemsSubject.value];
     const idx = items.findIndex(e => e.food.id === food.id);
     
     if (idx >= 0) {
-      // 如果已存在，增加数量
+      // if exist, update quantity
       items[idx] = { 
         ...items[idx], 
         quantity: items[idx].quantity + quantity 
       };
     } else {
-      // 如果不存在，添加新条目
+      // if not exist, add new entry
       items.push({ food, quantity });
     }
     this.itemsSubject.next(items);
   }
 
-  // 移除商品（通过 food.id）
+  // remove item (by food.id)
   removeItem(foodId: number) {
     const items = this.itemsSubject.value.filter(e => e.food.id !== foodId);
     this.itemsSubject.next(items);
   }
 
-  // 清空购物车
+  // clear cart
   clear() {
     this.itemsSubject.next([]);
   }
 
-  // 获取商品总总数 (如：购物车图标上的数字)
+  // get total count of items in cart
   getCount(): number {
     return this.itemsSubject.value.reduce((total, entry) => total + entry.quantity, 0);
   }
 
-  // 计算总价 (修复 HTML 中 cart.getTotal() 的报错)
+  // get total price of items in cart
   getTotal(): number {
     return this.itemsSubject.value.reduce((total, entry) => {
       return total + (entry.food.price * entry.quantity);
