@@ -4,8 +4,12 @@ require('dotenv').config();
 const sequelize = require("./config/db");
 const User = require("./models/user");
 const userRoutes = require("./routes/userRoutes");
+const initCronJobs = require('./utils/cronjob');
 
 const app = express();
+
+// 启动定时任务
+initCronJobs();
 
 // ===== MIDDLEWARE =====
 // Enable CORS for frontend communication
