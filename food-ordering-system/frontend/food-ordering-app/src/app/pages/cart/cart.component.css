@@ -1,0 +1,184 @@
+/* Container Layout */
+.cart-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  min-height: 400px;
+}
+
+.cart-title {
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 0.5rem;
+}
+
+/* Empty State */
+.empty-cart {
+  text-align: center;
+  padding: 3rem 0;
+  color: #888;
+}
+
+.empty-cart i {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+  color: #ddd;
+}
+
+/* Cart Item Styling */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: #fdfdfd;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.cart-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.item-name {
+  font-size: 1.1rem;
+  color: #2d3436;
+}
+
+.item-price {
+  margin: 0;
+  color: #636e72;
+  font-size: 0.9rem;
+}
+
+/* Controls & Buttons */
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.item-quantity {
+  font-weight: 600;
+  color: #d63031; /* Use a pizza-like theme color */
+}
+
+.btn-remove {
+  background: none;
+  border: 1px solid #faa0a0;
+  color: #e15555;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-remove:hover {
+  background: #ff7675;
+  color: white;
+  border-color: #ff7575;
+}
+
+/* Summary Section */
+.cart-footer {
+  margin-top: 2rem;
+}
+
+.cart-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.total-amount {
+  font-size: 1.5rem;
+  color: #2d3436;
+  font-weight: 800;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-clear {
+  background: #f1f2f6;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: #57606f;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-clear:hover {
+  background: #dfe4ea;
+}
+
+.btn-checkout {
+  background: #e62222; /* Pizza Gold/Orange */
+  border: none;
+  padding: 10px 30px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+}
+
+.btn-checkout:hover {
+  background: #ff0000;
+  transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .item-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Empty Cart 'Go to Menu' Button */
+.btn-primary {
+  background-color: #e62222; 
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none; /* 防止作为 a 标签时出现下划线 */
+  display: inline-block;
+  margin-top: 15px;
+  box-shadow: 0 4px 10px rgba(230, 126, 34, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #d30000; /* 悬停时颜色深一点 */
+  transform: translateY(-2px); /* 向上轻微浮动 */
+  box-shadow: 0 6px 15px rgba(230, 34, 34, 0.4);
+  color: white;
+}
+
+.btn-primary:active {
+  transform: translateY(0); /* 点击时按下 */
+}

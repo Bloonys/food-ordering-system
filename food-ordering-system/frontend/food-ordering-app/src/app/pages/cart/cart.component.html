@@ -1,40 +1,51 @@
-<div class="cart-container">
-  <h2>您的购物车</h2>
+<div class="cart-container container">
+  <h2 class="cart-title">Your Shopping Cart</h2>
 
   <div *ngIf="(cart.items$ | async) as items; else loading">
     
     <div *ngIf="items.length === 0" class="empty-cart">
-      <p>购物车空空如也，快去去点餐吧！</p>
+      <i class="bi bi-cart-x"></i>
+      <p>Your cart is empty. Time to order some delicious pizza!</p>
+      <button routerLink="/" class="btn-primary">Go to Menu</button>
     </div>
 
-    <div *ngFor="let entry of items" class="cart-item">
-      <div class="item-info">
-        <strong>{{ entry.food.name }}</strong>
-        <p>单价: {{ entry.food.price | currency }}</p>
-      </div>
+    <div class="cart-items-list">
+      <div *ngFor="let entry of items" class="cart-item">
+        <div class="item-info">
+          <strong class="item-name">{{ entry.food.name }}</strong>
+          <p class="item-price">Unit Price: {{ entry.food.price | currency }}</p>
+        </div>
 
-      <div class="item-controls">
-        <span>数量: {{ entry.quantity }}</span>
+        <div class="item-controls">
+          <span class="item-quantity">Qty: {{ entry.quantity }}</span>
+          
+          <button (click)="cart.removeItem(entry.food.id)" class="btn-remove" title="Remove Item">
+            <i class="bi bi-trash"></i> Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="items.length > 0" class="cart-footer">
+      <hr />
+      <div class="cart-summary">
+        <h3 class="total-amount">Total: {{ cart.getTotal() | currency }}</h3>
         
-        <button (click)="cart.removeItem(entry.food.id)" class="btn-remove">
-          删除
-        </button>
-      </div>
-    </div>
-
-    <hr *ngIf="items.length > 0" />
-
-    <div *ngIf="items.length > 0" class="cart-summary">
-      <h3>总计: {{ cart.getTotal() | currency }}</h3>
-      
-      <div class="actions">
-        <button (click)="cart.clear()" class="btn-clear">清空购物车</button>
-        <button class="btn-checkout">去结算</button>
+        <div class="actions">
+          <button (click)="cart.clear()" class="btn-clear">
+            Clear Cart
+          </button>
+          <button class="btn-checkout">
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <ng-template #loading>
-    <p>正在加载购物车...</p>
+    <div class="loading-spinner">
+      <p>Loading your cart...</p>
+    </div>
   </ng-template>
 </div>

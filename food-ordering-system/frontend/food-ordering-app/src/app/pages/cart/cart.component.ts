@@ -5,6 +5,7 @@ import { CartService } from '../../services/cart.service';
   selector: 'app-cart',
   standalone: false,
   templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent {
   constructor(public cart: CartService) {}

@@ -15,7 +15,7 @@
         <i class="bi bi-person-fill"></i>
         <span class="action-label d-none d-sm-inline">Login</span>
       </a>
-      <a class="btn-icon-text cart-button" routerLink="#">
+      <a class="btn-icon-text cart-button" routerLink="/cart">
         <i class="bi bi-cart-fill"></i>
         <span *ngIf="(cartCount$ | async) as c" class="cart-badge">{{ c }}</span>
         <span class="action-label d-none d-sm-inline ms-1">Cart</span>
