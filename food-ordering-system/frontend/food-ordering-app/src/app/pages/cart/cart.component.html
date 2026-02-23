@@ -1,0 +1,27 @@
+<h2>🛒 Shopping Cart</h2>
+
+<div *ngFor="let item of cart.getItems()">
+  <div>
+    <strong>{{ item.food.name }}</strong>
+  </div>
+
+  <div>
+    Quantity: {{ item.quantity }}
+  </div>
+
+  <div>
+    Price: {{ item.food.price | currency }}
+  </div>
+
+  <button (click)="cart.removeItem(item.food.id)">
+    Remove
+  </button>
+
+  <hr>
+</div>
+
+<h3>Total: {{ cart.getTotal() | currency }}</h3>
+
+<button (click)="cart.clear()">
+  Clear Cart
+</button>

@@ -8,6 +8,7 @@ import { FoodListComponent } from './pages/food-list/food-list.component';
 import { FoodEditComponent } from './pages/food-edit/food-edit.component';
 import { FoodCreateComponent } from './pages/food-create/food-create.component';
 import { FoodAdminComponent } from './pages/food-admin/food-admin.component';
+import { CartComponent } from './pages/cart/cart.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'foods/edit/:id', component: FoodEditComponent },
   { path: 'foods/create', component: FoodCreateComponent },
   { path: 'admin/foods', component: FoodAdminComponent },
+  { path: 'cart', component: CartComponent },
 
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },

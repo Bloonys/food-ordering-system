@@ -17,8 +17,12 @@ export class FoodCardComponent {
 
   toggleSelected() {
     if (!this.item) return;
-    this.item.selected = !this.item.selected;
+
     if (this.item.selected) {
+      this.item.selected = false;
+      this.cart.removeItem(this.item.id);
+    } else {
+      this.item.selected = true;
       this.cart.addItem(this.item, 1);
     }
   }
