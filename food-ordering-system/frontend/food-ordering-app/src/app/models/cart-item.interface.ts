@@ -4,3 +4,5 @@ export interface CartItem {
   food: Food;
   quantity: number;
 }
+
+//cart: shows when shopping

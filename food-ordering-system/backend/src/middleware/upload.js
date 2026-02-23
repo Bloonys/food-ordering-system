@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-
+//use multer to handle file uploads, store in 'uploads/' directory with unique filenames, limit to 5MB and only allow images (jpeg, png, gif)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');

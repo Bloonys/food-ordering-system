@@ -6,3 +6,4 @@ export interface Food {
   image?: string;
   description?: string;
 }
+// connect to backend and databse

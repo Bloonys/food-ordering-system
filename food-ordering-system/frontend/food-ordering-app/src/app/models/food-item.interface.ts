@@ -8,3 +8,4 @@ export interface FoodItem {
   selected?: boolean;
   rating?: number;
 }
+//show on homepage 

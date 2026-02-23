@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 /**
  * JWT Verification Middleware
- * 验证登录 token
+ * login token
  */
 const verifyToken = (req, res, next) => {
   try {

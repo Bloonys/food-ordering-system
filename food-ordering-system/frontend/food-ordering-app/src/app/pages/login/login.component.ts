@@ -25,13 +25,13 @@ export class LoginComponent {
       next: (res: any) => {
         console.log(res);
 
-        // 保存 token
+        // save token
         localStorage.setItem('token', res.token);
 
-        // 保存 role（方便前端判断）
+        // save role (for frontend judgment)
         localStorage.setItem('role', res.user.role);
 
-        // 根据角色跳转
+        // navigate to appropriate page
         if (res.user.role === 'admin') {
           this.router.navigate(['/admin/foods']);
         } else {
