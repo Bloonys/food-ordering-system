@@ -21,6 +21,8 @@ import { FoodCreateComponent } from './pages/food-create/food-create.component';
 import { FoodAdminComponent } from './pages/food-admin/food-admin.component';
 import { CartComponent } from './pages/cart/cart.component';
 
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+
 @NgModule({
   declarations: [
     App,
@@ -44,11 +46,18 @@ import { CartComponent } from './pages/cart/cart.component';
     RouterModule,
     CommonModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: JwtInterceptor,
-    multi: true
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [App]
 })
 export class AppModule { }
