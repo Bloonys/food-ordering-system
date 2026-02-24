@@ -4,6 +4,7 @@ require('dotenv').config();
 const sequelize = require("./config/db");
 const User = require("./models/user");
 const userRoutes = require("./routes/userRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const initCronJobs = require('./utils/cronjob');
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.json());
 const foodRoutes = require("./routes/foodRoutes");
 
 app.use("/api/foods", foodRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Serve uploaded images from the 'uploads' directory
 const path = require('path');
