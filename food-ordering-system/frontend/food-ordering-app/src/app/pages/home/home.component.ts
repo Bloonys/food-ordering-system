@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   items: FoodItem[] = [];
   allItems: FoodItem[] = [];
   sortBy: string = 'default';
+  searchTerm: string = '';
   
   private dataSub?: Subscription;
 
@@ -57,18 +58,35 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
   }
+//排序
+private executeFilter(cat: string | null): void {
 
-  private executeFilter(cat: string | null): void {
-    if (!cat || cat.toLowerCase() === 'all' || cat.toLowerCase() === 'home') {
-      this.items = [...this.allItems];
-    } else {
-      const name = cat.toLowerCase();
-      this.items = this.allItems.filter(i =>
-        (i.category || '').toLowerCase() === name
-      );
-    }
-    this.applySorting();
+  let tempItems: FoodItem[];
+
+  // 1️⃣ 分类过滤
+  if (!cat || cat.toLowerCase() === 'all' || cat.toLowerCase() === 'home') {
+    tempItems = [...this.allItems];
+  } else {
+    const name = cat.toLowerCase();
+    tempItems = this.allItems.filter(i =>
+      (i.category || '').toLowerCase() === name
+    );
   }
+
+  // 2️⃣ 🔎 搜索过滤
+  if (this.searchTerm.trim()) {
+    const keyword = this.searchTerm.toLowerCase();
+    tempItems = tempItems.filter(i =>
+      i.name.toLowerCase().includes(keyword) ||
+      (i.description || '').toLowerCase().includes(keyword)
+    );
+  }
+
+  this.items = tempItems;
+
+  // 3️⃣ 排序
+  this.applySorting();
+}
 
   applySorting(): void {
     if (this.sortBy === 'price') {
@@ -78,7 +96,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.cdr.detectChanges(); // 排序后也强制刷新一次
   }
+  // 🔄 排序按钮触发
+  onSortChange(type: string): void {
+    this.sortBy = type;
+    const catName = this.route.snapshot.paramMap.get('name');
+    this.executeFilter(catName);
+  }
 
+  //显示
   ngOnDestroy(): void {
     if (this.dataSub) {
       this.dataSub.unsubscribe();

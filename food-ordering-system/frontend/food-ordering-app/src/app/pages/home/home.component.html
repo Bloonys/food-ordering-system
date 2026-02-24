@@ -1,42 +1,76 @@
 <section class="home-container">
-  <!-- Page Header with Title -->
+
+  <!-- Page Header -->
   <div class="home-header">
     <div class="header-content">
       <h1 class="page-title fw-900">
         <span class="text-gradient">Explore Our Menu</span>
       </h1>
+
       <p class="page-subtitle">
-        &nbsp;Fresh, delicious pizzas and more. {{ items.length }} items available
+        Fresh, delicious pizzas and more.
+        <strong>{{ items.length }}</strong> items available
       </p>
     </div>
 
-    <!-- Filter and Sort Controls -->
+    <!-- Filter & Sort Controls -->
     <div class="filter-controls">
+
+      <!-- 🔎 Search Box -->
       <div class="search-box">
-        <input type="text" class="form-control" placeholder="Search items...">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search items..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()">
       </div>
+
+      <!-- 🔥 Sort Buttons -->
       <div class="sort-buttons">
-        <button class="btn btn-sm btn-outline-danger" (click)="sortBy='price'">
-          <i class="bi bi-sort-up me-1"></i>Price
+
+        <button
+          class="btn btn-sm"
+          [ngClass]="sortBy === 'price' ? 'btn-danger' : 'btn-outline-danger'"
+          (click)="onSortChange('price')">
+
+          <i class="bi bi-sort-up me-1"></i>
+          Price
         </button>
-        <button class="btn btn-sm btn-outline-danger" (click)="sortBy='rating'">
-          <i class="bi bi-star me-1"></i>Top Rated
+
+        <button
+          class="btn btn-sm"
+          [ngClass]="sortBy === 'rating' ? 'btn-danger' : 'btn-outline-danger'"
+          (click)="onSortChange('rating')">
+
+          <i class="bi bi-star me-1"></i>
+          Top Rated
         </button>
+
       </div>
+
     </div>
   </div>
 
   <!-- Products Grid -->
   <div class="products-grid">
-    <div class="grid-item" *ngFor="let it of items; let i = index" [ngStyle]="{ 'animation-delay': (i * 50) + 'ms' }">
+
+    <div
+      class="grid-item"
+      *ngFor="let it of items; let i = index"
+      [ngStyle]="{ 'animation-delay': (i * 50) + 'ms' }">
+
       <app-food-card [item]="it"></app-food-card>
+
     </div>
+
   </div>
 
   <!-- Empty State -->
   <div *ngIf="items.length === 0" class="empty-state">
     <i class="bi bi-inbox"></i>
     <h5>No items found</h5>
-    <p>Check back soon for more delicious options</p>
+    <p>Try adjusting your search or category filter</p>
   </div>
+
 </section>
