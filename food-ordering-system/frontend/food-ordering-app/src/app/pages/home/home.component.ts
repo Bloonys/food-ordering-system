@@ -4,6 +4,7 @@ import { Subscription, combineLatest, startWith } from 'rxjs';
 import type { FoodItem } from '../../models/food-item.interface';
 import { FoodService } from '../../services/food.service';
 
+
 @Component({
   selector: 'app-home',
   standalone: false,
@@ -102,7 +103,11 @@ private executeFilter(cat: string | null): void {
     const catName = this.route.snapshot.paramMap.get('name');
     this.executeFilter(catName);
   }
-
+// 🔎 搜索触发
+  onSearch(): void {
+    const catName = this.route.snapshot.paramMap.get('name');
+    this.executeFilter(catName);
+  }
   //显示
   ngOnDestroy(): void {
     if (this.dataSub) {
