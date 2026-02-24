@@ -1,37 +1,84 @@
 <article class="card-modern h-100 d-flex flex-column">
-  <!-- Image container with overlay -->
+
+  <!-- Image -->
   <div class="card-img-wrapper position-relative">
-    <img [src]="environment.apiUrl + item.image"
-     class="card-img-cover"
-     alt="{{ item.name }}">
+    <img
+      [src]="environment.apiUrl + item.image"
+      class="card-img-cover"
+      [alt]="item.name">
+
     <div class="card-img-overlay">
       <span class="badge bg-danger px-2 py-1 fw-bold">
-        <i class="bi bi-star-fill me-1"></i>4.8
+        <i class="bi bi-star-fill me-1"></i>
+        4.8
       </span>
     </div>
   </div>
 
-  <!-- Card body -->
+  <!-- Card Body -->
   <div class="p-3 d-flex flex-column flex-grow-1">
-    <h5 class="mb-1 fw-bold text-truncate" style="color: #222;">{{ item.name }}</h5>
-    <p class="mb-3 text-muted small flex-grow-1" style="line-height: 1.4;">{{ item.description }}</p>
 
-    <!-- Price and button section -->
+    <h5 class="mb-1 fw-bold text-truncate" style="color:#222;">
+      {{ item.name }}
+    </h5>
+
+    <p class="mb-3 text-muted small flex-grow-1"
+       style="line-height:1.4;">
+      {{ item.description }}
+    </p>
+
+    <!-- Price + Cart Controls -->
     <div class="d-flex align-items-center justify-content-between mt-auto">
+
+      <!-- Price -->
       <div class="d-flex flex-column">
-        <span class="price">{{ item.price | currency:'USD':'symbol':'1.2-2' }}</span>
-        <small class="text-muted" style="font-size: 0.75rem;"></small>
+        <span class="price">
+          {{ item.price | currency:'USD':'symbol':'1.2-2' }}
+        </span>
       </div>
 
-      <button
-        class="btn btn-sm btn-red rounded-pill fw-bold d-flex align-items-center gap-1"
-        (click)="toggleSelected()"
-        [attr.aria-pressed]="item.selected ? 'true' : 'false'"
-        style="transition: all 200ms cubic-bezier(0.2, 0.9, 0.3, 1); min-width: 95px;"
-      >
-        <i class="bi" [ngClass]="item.selected ? 'bi-check-circle-fill' : 'bi-plus-lg'"></i>
-        <span>{{ item.selected ? 'Added' : 'Add' }}</span>
-      </button>
+      <!-- If quantity is 0 -->
+      <ng-container *ngIf="quantity === 0; else quantityControls">
+
+        <button
+          class="btn btn-sm btn-red rounded-pill fw-bold d-flex align-items-center gap-1"
+          (click)="add()"
+          style="min-width:95px; transition: all 200ms ease;">
+          <i class="bi bi-plus-lg"></i>
+          Add
+        </button>
+
+      </ng-container>
+
+      <!-- If already in cart -->
+      <ng-template #quantityControls>
+
+        <div class="d-flex align-items-center gap-2">
+
+          <!-- Decrease -->
+          <button
+            class="btn btn-sm btn-outline-danger rounded-circle"
+            (click)="decrease()">
+            <i class="bi bi-dash"></i>
+          </button>
+
+          <!-- Quantity -->
+          <span class="fw-bold fs-6">
+            {{ quantity }}
+          </span>
+
+          <!-- Increase -->
+          <button
+            class="btn btn-sm btn-danger rounded-circle"
+            (click)="increase()">
+            <i class="bi bi-plus"></i>
+          </button>
+
+        </div>
+
+      </ng-template>
+
     </div>
+
   </div>
 </article>

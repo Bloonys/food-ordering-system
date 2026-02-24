@@ -10,25 +10,39 @@ import { environment } from '../../../enviroments/enviroment';
   styleUrls: ['./food-card.component.css']
 })
 export class FoodCardComponent {
+
   environment = environment;
+
   @Input() item!: FoodItem;
 
-  constructor(private cart: CartService) {}
+  constructor(public cart: CartService) {}
 
-  toggleSelected() {
-    if (!this.item) return;
-
-    if (this.item.selected) {
-      this.item.selected = false;
-      this.cart.removeItem(this.item.id);
-    } else {
-      this.item.selected = true;
-      this.cart.addItem(this.item, 1);
-    }
+  // ✅ 获取当前商品在购物车中的数量
+  get quantity(): number {
+    const entry = this.cart.getItems().find(e => e.food.id === this.item.id);
+    return entry ? entry.quantity : 0;
   }
 
-  addToCart() {
-    if (!this.item) return;
+  // ✅ 第一次加入购物车
+  add(): void {
     this.cart.addItem(this.item, 1);
+  }
+
+  // ✅ 增加数量
+  increase(): void {
+    this.cart.addItem(this.item, 1);
+  }
+
+  // ✅ 减少数量
+  decrease(): void {
+    const entry = this.cart.getItems().find(e => e.food.id === this.item.id);
+
+    if (!entry) return;
+
+    if (entry.quantity > 1) {
+      this.cart.addItem(this.item, -1);
+    } else {
+      this.cart.removeItem(this.item.id);
+    }
   }
 }

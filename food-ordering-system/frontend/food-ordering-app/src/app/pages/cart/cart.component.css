@@ -1,4 +1,6 @@
-/* Container Layout */
+/* =========================
+   Container Layout
+========================= */
 .cart-container {
   max-width: 800px;
   margin: 2rem auto;
@@ -17,7 +19,9 @@
   padding-bottom: 0.5rem;
 }
 
-/* Empty State */
+/* =========================
+   Empty State
+========================= */
 .empty-cart {
   text-align: center;
   padding: 3rem 0;
@@ -31,11 +35,14 @@
   color: #ddd;
 }
 
-/* Cart Item Styling */
+/* =========================
+   Cart Item Styling
+========================= */
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
   background: #fdfdfd;
@@ -46,12 +53,48 @@
 
 .cart-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   图片方框
+========================= */
+.item-image {
+  flex-shrink: 0;
+}
+
+.image-box {
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  background: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================
+   信息
+========================= */
+.item-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .item-name {
   font-size: 1.1rem;
   color: #2d3436;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item-price {
@@ -60,18 +103,22 @@
   font-size: 0.9rem;
 }
 
-/* Controls & Buttons */
+/* =========================
+   Controls & Buttons
+========================= */
 .item-controls {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
 }
 
 .item-quantity {
   font-weight: 600;
-  color: #d63031; /* Use a pizza-like theme color */
+  color: #d63031;
 }
 
+/* 删除按钮 */
 .btn-remove {
   background: none;
   border: 1px solid #faa0a0;
@@ -89,7 +136,27 @@
   border-color: #ff7575;
 }
 
-/* Summary Section */
+/* 编辑按钮 */
+.btn-edit {
+  background: #fff1f1;
+  border: 1px solid #ffc8c8;
+  color: #eb2f2f;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+  background: #ffd6d6;
+  border-color: #fa9191;
+  color: #c41d1d;
+}
+
+/* =========================
+   Summary Section
+========================= */
 .cart-footer {
   margin-top: 2rem;
 }
@@ -112,6 +179,7 @@
   gap: 1rem;
 }
 
+/* 清空按钮 */
 .btn-clear {
   background: #f1f2f6;
   border: none;
@@ -120,14 +188,16 @@
   color: #57606f;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.2s ease;
 }
 
 .btn-clear:hover {
   background: #dfe4ea;
 }
 
+/* 结账按钮 */
 .btn-checkout {
-  background: #e62222; /* Pizza Gold/Orange */
+  background: #e62222;
   border: none;
   padding: 10px 30px;
   border-radius: 6px;
@@ -135,6 +205,7 @@
   cursor: pointer;
   font-weight: 700;
   box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+  transition: all 0.2s ease;
 }
 
 .btn-checkout:hover {
@@ -142,22 +213,37 @@
   transform: scale(1.02);
 }
 
-/* Responsive */
+/* =========================
+   Responsive
+========================= */
 @media (max-width: 576px) {
   .cart-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    flex-direction: row;
   }
+
+  .item-image {
+    margin-right: 0.5rem;
+  }
+
+  .image-box {
+    width: 70px;
+    height: 70px;
+  }
+
   .item-controls {
-    width: 100%;
-    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .actions {
+    gap: 0.5rem;
   }
 }
 
-/* Empty Cart 'Go to Menu' Button */
+/* =========================
+   Empty Cart 'Go to Menu'
+========================= */
 .btn-primary {
-  background-color: #e62222; 
+  background-color: #e62222;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -166,19 +252,19 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-decoration: none; /* 防止作为 a 标签时出现下划线 */
+  text-decoration: none;
   display: inline-block;
   margin-top: 15px;
   box-shadow: 0 4px 10px rgba(230, 126, 34, 0.2);
 }
 
 .btn-primary:hover {
-  background-color: #d30000; /* 悬停时颜色深一点 */
-  transform: translateY(-2px); /* 向上轻微浮动 */
+  background-color: #d30000;
+  transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(230, 34, 34, 0.4);
   color: white;
 }
 
 .btn-primary:active {
-  transform: translateY(0); /* 点击时按下 */
+  transform: translateY(0);
 }

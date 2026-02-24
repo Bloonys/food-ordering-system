@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { CartService } from '../../services/cart.service';
+import { CartService, CartEntry } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
 import { take } from 'rxjs/operators';
+import { environment } from '../../../enviroments/enviroment';
 
 @Component({
   selector: 'app-cart',
@@ -10,6 +11,8 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent {
+
+  environment = environment;
 
   constructor(
     public cart: CartService,
@@ -34,5 +37,26 @@ export class CartComponent {
         }
       });
     });
+  }
+
+  // ✅ 编辑数量
+  edit(entry: CartEntry) {
+    const input = prompt('Enter new quantity', entry.quantity.toString());
+
+    if (input === null) return;
+
+    const qty = parseInt(input, 10);
+
+    if (isNaN(qty)) {
+      alert('Invalid number');
+      return;
+    }
+
+    if (qty <= 0) {
+      this.cart.removeItem(entry.food.id);
+    } else {
+      this.cart.removeItem(entry.food.id);
+      this.cart.addItem(entry.food, qty);
+    }
   }
 }
