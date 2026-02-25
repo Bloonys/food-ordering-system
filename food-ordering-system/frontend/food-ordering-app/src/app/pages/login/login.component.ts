@@ -13,7 +13,9 @@ export class LoginComponent {
 
   @ViewChild('loginForm') loginForm!: NgForm;
 
-  constructor(private authService: AuthService, private router: Router
+  constructor(
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   onSubmit() {
@@ -23,22 +25,14 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: (res: any) => {
-        console.log(res);
 
-        // save token
-        localStorage.setItem('token', res.token);
-
-        // save role (for frontend judgment)
-        localStorage.setItem('role', res.user.role);
-        // set auth state html
-        this.authService.setLoggedIn(true);
-
-        // navigate to appropriate page
+        // 根据角色跳转
         if (res.user.role === 'admin') {
           this.router.navigate(['/admin/foods']);
         } else {
           this.router.navigate(['/profile']);
         }
+
       },
       error: (err) => {
         console.error(err);

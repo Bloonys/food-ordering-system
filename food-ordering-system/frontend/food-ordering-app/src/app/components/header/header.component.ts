@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { map, Subscription } from 'rxjs';
+import { map } from 'rxjs';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,46 +10,33 @@ import { Observable } from 'rxjs';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent {
 
-  cartCount$!: Observable<number>;
-  isLoggedIn = false;
-  role: string | null = null;
+  // 登录状态（响应式）
+  isLoggedIn$: Observable<boolean>;
 
-  private authSub!: Subscription;
+  // 购物车数量（响应式）
+  cartCount$: Observable<number>;
 
   constructor(
     private cart: CartService,
     public auth: AuthService
-  ) {}
+  ) {
 
-  ngOnInit(): void {
+    // 登录状态直接用 service 里的 observable
+    this.isLoggedIn$ = this.auth.isLoggedIn$;
 
-    // cart count
+    // 购物车数量
     this.cartCount$ = this.cart.items$.pipe(
       map(items => items.reduce((s, e) => s + e.quantity, 0))
     );
-
-    // listen auth changes
-    this.authSub = this.auth.isLoggedIn$.subscribe(() => {
-      this.updateAuthState();
-    });
-
-    // init state
-    this.updateAuthState();
-  }
-
-  updateAuthState() {
-    this.isLoggedIn = !!localStorage.getItem('token');
-    this.role = localStorage.getItem('role');
   }
 
   logout() {
     this.auth.logout();
-    this.updateAuthState();
   }
 
-  ngOnDestroy(): void {
-    this.authSub?.unsubscribe();
+  get role(): string | null {
+    return localStorage.getItem('role');
   }
 }

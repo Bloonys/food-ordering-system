@@ -1,20 +1,19 @@
 <header class="app-header">
   <div class="header-row container-fluid py-2 d-flex align-items-center justify-content-between">
     
-    <!-- 左边 Brand -->
+    <!-- Brand -->
     <div class="brand-name-container">
-      <a class="brand-link" routerLink="/">
+      <a class="brand-link" routerLink="/home">
         <i class="bi bi-pizza brand-icon-small"></i>
         <span class="brand-name">SomeHow♥Pizza</span>
       </a>
     </div>
 
-    <!-- 右边 -->
     <div class="header-right d-flex align-items-center gap-2">
 
-      <!-- 未登录：Login -->
+      <!-- 未登录 -->
       <a
-        *ngIf="!isLoggedIn"
+        *ngIf="!(isLoggedIn$ | async)"
         class="btn-icon-text"
         routerLink="/login"
       >
@@ -22,9 +21,9 @@
         <span class="action-label d-none d-sm-inline">Login</span>
       </a>
 
-      <!-- 管理员专属：Manage -->
+      <!-- 管理员 -->
       <a
-        *ngIf="isLoggedIn && role === 'admin'"
+        *ngIf="(isLoggedIn$ | async) && role === 'admin'"
         class="btn-icon-text"
         routerLink="/admin/foods"
       >
@@ -32,9 +31,9 @@
         <span class="action-label d-none d-sm-inline">Manage</span>
       </a>
 
-      <!-- 已登录：Profile -->
+      <!-- 已登录 -->
       <a
-        *ngIf="isLoggedIn"
+        *ngIf="isLoggedIn$ | async"
         class="btn-icon-text"
         routerLink="/profile"
       >
@@ -52,6 +51,5 @@
       </a>
 
     </div>
-
   </div>
 </header>

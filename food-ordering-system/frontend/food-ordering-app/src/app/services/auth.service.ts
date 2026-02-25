@@ -9,8 +9,8 @@ export class AuthService {
 
   private apiUrl = 'http://localhost:3000/auth';
 
-  private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
-  isLoggedIn$ = this.loggedIn.asObservable();
+  private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  isLoggedIn$ = this.loggedInSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -20,8 +20,8 @@ export class AuthService {
         tap(res => {
           if (res?.token) {
             localStorage.setItem('token', res.token);
-            localStorage.setItem('role', res.role);
-            this.loggedIn.next(true);
+            localStorage.setItem('role', res.user.role);
+            this.loggedInSubject.next(true);
           }
         })
       );
@@ -30,11 +30,11 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
-    this.loggedIn.next(false);
+    this.loggedInSubject.next(false);
   }
 
-  setLoggedIn(status: boolean) {
-    this.loggedIn.next(status);
+  getRole(): string | null {
+    return localStorage.getItem('role');
   }
 
   getProfile() {
