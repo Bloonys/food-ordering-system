@@ -9,12 +9,12 @@
       </a>
     </div>
 
-    <!-- 右边 Login / Profile + Cart -->
+    <!-- 右边 -->
     <div class="header-right d-flex align-items-center gap-2">
 
       <!-- 未登录：Login -->
       <a
-        *ngIf="!(auth.isLoggedIn$ | async)"
+        *ngIf="!isLoggedIn"
         class="btn-icon-text"
         routerLink="/login"
       >
@@ -22,9 +22,19 @@
         <span class="action-label d-none d-sm-inline">Login</span>
       </a>
 
+      <!-- 管理员专属：Manage -->
+      <a
+        *ngIf="isLoggedIn && role === 'admin'"
+        class="btn-icon-text"
+        routerLink="/admin/foods"
+      >
+        <i class="bi bi-gear-fill"></i>
+        <span class="action-label d-none d-sm-inline">Manage</span>
+      </a>
+
       <!-- 已登录：Profile -->
       <a
-        *ngIf="auth.isLoggedIn$ | async"
+        *ngIf="isLoggedIn"
         class="btn-icon-text"
         routerLink="/profile"
       >
@@ -35,7 +45,9 @@
       <!-- Cart -->
       <a class="btn-icon-text cart-button" routerLink="/cart">
         <i class="bi bi-cart-fill"></i>
-        <span *ngIf="(cartCount$ | async) as c" class="cart-badge">{{ c }}</span>
+        <span *ngIf="(cartCount$ | async) as c" class="cart-badge">
+          {{ c }}
+        </span>
         <span class="action-label d-none d-sm-inline ms-1">Cart</span>
       </a>
 

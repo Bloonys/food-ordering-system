@@ -1,20 +1,29 @@
 <div class="premium-wrapper animate-in">
-  
+
   <header class="main-header">
     <div class="title-group">
       <span class="badge-accent">Admin Portal</span>
-      <h1>Kitchen <span class="text-gradient">Command Center</span></h1>
+      <h2>Kitchen <span class="text-gradient">Command Center</span></h2>
     </div>
+
     <div class="stats-overview">
       <div class="stat-pill">
         <span class="label">Items：</span>
         <span class="value">{{ foods.length }}</span>
       </div>
+
+      <!-- Signout -->
+      <button class="btn-signout" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i> Sign Out
+      </button>
     </div>
   </header>
 
   <div class="main-grid">
-    
+
+    <!-- ======================= -->
+    <!-- Editor Section -->
+    <!-- ======================= -->
     <section class="editor-section">
       <div class="neon-card">
         <div class="card-inner">
@@ -22,12 +31,12 @@
             <div class="icon-box">
               <i class="bi" [ngClass]="editing ? 'bi-stars' : 'bi-plus-lg'"></i>
             </div>
-            <h3>{{ editing ? 'Update Item' : 'New Dish' }}</h3>
+            <h4>{{ editing ? 'Update Item' : 'Add New Dish' }}</h4>
           </div>
 
           <form #foodForm="ngForm" (ngSubmit)="save()" class="premium-form">
             <div class="input-container">
-              <label>Dish Name</label>
+              <label>Name</label>
               <input [(ngModel)]="form.name" name="name" required placeholder="Signature Pizza...">
             </div>
 
@@ -39,6 +48,7 @@
                   <input [(ngModel)]="form.price" name="price" type="number" required>
                 </div>
               </div>
+
               <div class="input-container">
                 <label>Category</label>
                 <select [(ngModel)]="form.category" name="category" required>
@@ -58,12 +68,15 @@
               <textarea [(ngModel)]="form.description" name="description" rows="2"></textarea>
             </div>
 
+            <!-- File Upload -->
             <div class="file-drop-zone">
               <input type="file" (change)="onFileSelected($event)" id="p-file">
               <label for="p-file">
-                <span>{{ selectedFile ? selectedFile.name : ' ' }}</span>
+                <i class="bi bi-upload"></i>
+                <span>{{ selectedFile ? selectedFile.name : ' uploads picture' }}</span>
               </label>
             </div>
+
             <br>
 
             <div class="button-group">
@@ -77,33 +90,70 @@
       </div>
     </section>
 
+    <!-- ======================= -->
+    <!-- List Section -->
+    <!-- ======================= -->
     <section class="list-section">
       <div class="section-title">Active Menu Items</div>
-      
+
+      <!-- Search -->
+      <div class="search-box">
+        <input
+          [(ngModel)]="searchTerm"
+          (input)="filterFoods()"
+          placeholder="Search by name..."
+          class="search-input"
+        />
+      </div>
+
       <div class="item-stack">
-        <div class="glass-item" *ngFor="let food of foods; let i = index" [style.animation-delay]="i * 0.05 + 's'">
+
+        <div
+          class="glass-item"
+          *ngFor="let food of filteredFoods; let i = index"
+          [style.animation-delay]="i * 0.05 + 's'"
+        >
           <div class="item-visual">
-            <div class="placeholder-img">{{ food.name[0] }}</div>
+
+            <!-- Image Display -->
+            <img
+              *ngIf="food.image"
+              [src]="'http://localhost:3000' + food.image"
+              alt="{{ food.name }}"
+              class="food-thumb"
+            />
+
+            <!-- Placeholder -->
+            <div *ngIf="!food.image" class="placeholder-img">
+              {{ food.name[0] }}
+            </div>
           </div>
+
           <div class="item-content">
             <div class="top-row">
               <span class="name">{{ food.name }}</span>
               <span class="price">${{ food.price }}</span>
             </div>
+
             <div class="bottom-row">
               <span class="cat-tag">{{ food.category }}</span>
               <p class="desc">{{ food.description }}</p>
             </div>
           </div>
+
           <div class="item-actions">
-            <button class="action-btn edit" (click)="edit(food)"><i class="bi bi-pencil-fill"></i></button>
-            <button class="action-btn del" (click)="delete(food.id!)"><i class="bi bi-trash3-fill"></i></button>
+            <button class="action-btn edit" (click)="edit(food)">
+              <i class="bi bi-pencil-fill"></i>
+            </button>
+            <button class="action-btn del" (click)="delete(food.id!)">
+              <i class="bi bi-trash3-fill"></i>
+            </button>
           </div>
         </div>
-        
-        <div class="empty-state" *ngIf="foods.length === 0">
+
+        <div class="empty-state" *ngIf="filteredFoods.length === 0">
           <i class="bi bi-inbox"></i>
-          <p>The kitchen is quiet...</p>
+          <p>No results found...</p>
         </div>
       </div>
     </section>

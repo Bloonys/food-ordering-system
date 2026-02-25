@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +15,16 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string) {
-    return this.http.post<any>(`${this.apiUrl}/login`, {
-      email,
-      password
-    });
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password })
+      .pipe(
+        tap(res => {
+          if (res?.token) {
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('role', res.role);
+            this.loggedIn.next(true);
+          }
+        })
+      );
   }
 
   logout() {

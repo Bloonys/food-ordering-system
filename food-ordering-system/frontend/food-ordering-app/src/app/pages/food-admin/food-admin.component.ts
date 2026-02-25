@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FoodService } from '../../services/food.service';
+import { Router } from '@angular/router';
 import type { Food } from '../../models/food.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-food-admin',
@@ -11,6 +13,8 @@ import type { Food } from '../../models/food.model';
 export class FoodAdminComponent implements OnInit {
 
   foods: Food[] = [];
+  filteredFoods: Food[] = [];
+
   editing: Food | null = null;
 
   form: Food = {
@@ -22,16 +26,26 @@ export class FoodAdminComponent implements OnInit {
 
   selectedFile: File | null = null;
 
-  constructor(private foodService: FoodService) {}
+  searchTerm: string = '';
+
+  constructor(
+    private foodService: FoodService,
+    private router: Router,
+    private auth: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadFoods();
   }
 
+  // ================================
+  // Load foods
+  // ================================
   loadFoods(): void {
     this.foodService.getFoods().subscribe({
       next: (data) => {
         this.foods = data;
+        this.filteredFoods = data;
       },
       error: (err) => {
         console.error('Failed to load foods', err);
@@ -39,6 +53,19 @@ export class FoodAdminComponent implements OnInit {
     });
   }
 
+  // ================================
+  // Search filter
+  // ================================
+  filterFoods(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredFoods = this.foods.filter(food =>
+      food.name.toLowerCase().includes(term)
+    );
+  }
+
+  // ================================
+  // Edit
+  // ================================
   edit(food: Food): void {
     this.editing = food;
     this.form = { ...food };
@@ -46,57 +73,73 @@ export class FoodAdminComponent implements OnInit {
 
   cancel(): void {
     this.editing = null;
-    this.form = { name: '', price: 0, category: '' };
+    this.form = {
+      name: '',
+      price: 0,
+      category: '',
+      description: ''
+    };
     this.selectedFile = null;
   }
 
+  // ================================
+  // File upload
+  // ================================
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
   }
 
-save(): void {
+  // ================================
+  // Save (Create / Update)
+  // ================================
+  save(): void {
 
-  // === 校验 ===
-  if (!this.form.name.trim()) {
-    alert('Name is required');
-    return;
+    // ===== Validation =====
+    if (!this.form.name.trim()) {
+      alert('Name is required');
+      return;
+    }
+
+    if (!this.form.category.trim()) {
+      alert('Category is required');
+      return;
+    }
+
+    if (!this.form.price || this.form.price <= 0) {
+      alert('Price must be greater than 0');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('name', this.form.name);
+    formData.append('price', String(this.form.price));
+    formData.append('category', this.form.category);
+    formData.append('description', this.form.description || '');
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+
+    if (this.editing) {
+      this.foodService.updateFood(this.editing.id!, formData).subscribe({
+        next: () => {
+          this.loadFoods();
+          this.cancel();
+        }
+      });
+    } else {
+      this.foodService.createFood(formData).subscribe({
+        next: () => {
+          this.loadFoods();
+          this.cancel();
+        }
+      });
+    }
   }
 
-  if (!this.form.category.trim()) {
-    alert('Category is required');
-    return;
-  }
-
-  if (this.form.price === null || this.form.price === undefined || this.form.price <= 0) {
-    alert('Price must be greater than 0');
-    return;
-  }
-  // === 校验结束 ===
-
-  const formData = new FormData();
-
-  formData.append('name', this.form.name);
-  formData.append('price', String(this.form.price));
-  formData.append('category', this.form.category);
-  formData.append('description', this.form.description || '');
-
-  if (this.selectedFile) {
-    formData.append('image', this.selectedFile);
-  }
-
-  if (this.editing) {
-    this.foodService.updateFood(this.editing.id!, formData).subscribe(() => {
-      this.loadFoods();
-      this.cancel();
-    });
-  } else {
-    this.foodService.createFood(formData).subscribe(() => {
-      this.loadFoods();
-      this.cancel();
-    });
-  }
-}
-
+  // ================================
+  // Delete
+  // ================================
   delete(id: number): void {
     if (confirm('Delete item?')) {
       this.foodService.deleteFood(id).subscribe({
@@ -106,4 +149,15 @@ save(): void {
       });
     }
   }
+
+  // ================================
+  // Logout
+  // ================================
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    this.auth.logout();  
+    this.router.navigate(['/login']);
+  }
+
 }
