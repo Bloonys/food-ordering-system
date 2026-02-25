@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,6 +15,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private cartService: CartService,
     private router: Router
   ) {}
 
@@ -29,7 +31,17 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
+    // 清 token & role
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
+    // 清购物车
+    this.cartService.clear();
+
+    // 通知 AuthService（header 更新）
+    this.authService.logout();
+
+    // 跳登录页
     this.router.navigate(['/login']);
   }
 }

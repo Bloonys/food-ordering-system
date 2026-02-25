@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -11,7 +12,16 @@ import { map } from 'rxjs/operators';
 export class HeaderComponent {
   readonly cartCount$;
 
-  constructor(private cart: CartService) {
-    this.cartCount$ = this.cart.items$.pipe(map(items => items.reduce((s, e) => s + e.quantity, 0)));
+  constructor(
+    private cart: CartService,
+    public auth: AuthService
+  ) {
+    this.cartCount$ = this.cart.items$.pipe(
+      map(items => items.reduce((s, e) => s + e.quantity, 0))
+    );
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

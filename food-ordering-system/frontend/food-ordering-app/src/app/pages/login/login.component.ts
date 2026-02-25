@@ -30,6 +30,8 @@ export class LoginComponent {
 
         // save role (for frontend judgment)
         localStorage.setItem('role', res.user.role);
+        // set auth state html
+        this.authService.setLoggedIn(true);
 
         // navigate to appropriate page
         if (res.user.role === 'admin') {

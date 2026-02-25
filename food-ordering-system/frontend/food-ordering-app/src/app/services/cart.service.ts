@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import type { FoodItem } from '../models/food-item.interface';
 
-// 1. define CartEntry to represent an item in the cart (food + quantity)
 export interface CartEntry {
   food: FoodItem;
   quantity: number;
@@ -10,57 +9,73 @@ export interface CartEntry {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  // manage cart items with BehaviorSubject to allow components to subscribe and react to changes
-  private itemsSubject = new BehaviorSubject<CartEntry[]>([]);
 
-  // expose as Observable for components to use async pipe
+  private storageKey = 'cart';
+
+  private itemsSubject = new BehaviorSubject<CartEntry[]>(this.loadFromStorage());
   items$ = this.itemsSubject.asObservable();
 
   constructor() {}
 
-  // get current cart items
+  // 获取当前
   getItems(): CartEntry[] {
     return this.itemsSubject.value;
   }
 
-  // add item to cart
+  // 添加
   addItem(food: FoodItem, quantity = 1) {
     const items = [...this.itemsSubject.value];
     const idx = items.findIndex(e => e.food.id === food.id);
-    
+
     if (idx >= 0) {
-      // if exist, update quantity
-      items[idx] = { 
-        ...items[idx], 
-        quantity: items[idx].quantity + quantity 
+      items[idx] = {
+        ...items[idx],
+        quantity: items[idx].quantity + quantity
       };
     } else {
-      // if not exist, add new entry
       items.push({ food, quantity });
     }
-    this.itemsSubject.next(items);
+
+    this.update(items);
   }
 
-  // remove item (by food.id)
+  // 删除
   removeItem(foodId: number) {
     const items = this.itemsSubject.value.filter(e => e.food.id !== foodId);
-    this.itemsSubject.next(items);
+    this.update(items);
   }
 
-  // clear cart
+  // 清空
   clear() {
-    this.itemsSubject.next([]);
+    this.update([]);
   }
 
-  // get total count of items in cart
+  // 总数
   getCount(): number {
-    return this.itemsSubject.value.reduce((total, entry) => total + entry.quantity, 0);
+    return this.itemsSubject.value.reduce((sum, e) => sum + e.quantity, 0);
   }
 
-  // get total price of items in cart
+  // 总价
   getTotal(): number {
-    return this.itemsSubject.value.reduce((total, entry) => {
-      return total + (entry.food.price * entry.quantity);
-    }, 0);
+    return this.itemsSubject.value.reduce(
+      (sum, e) => sum + e.food.price * e.quantity,
+      0
+    );
+  }
+
+  // ====== 私有 ======
+
+  private update(items: CartEntry[]) {
+    this.itemsSubject.next(items);
+    this.saveToStorage(items);
+  }
+
+  private saveToStorage(items: CartEntry[]) {
+    localStorage.setItem(this.storageKey, JSON.stringify(items));
+  }
+
+  private loadFromStorage(): CartEntry[] {
+    const data = localStorage.getItem(this.storageKey);
+    return data ? JSON.parse(data) : [];
   }
 }
