@@ -37,7 +37,7 @@
           <form #foodForm="ngForm" (ngSubmit)="save()" class="premium-form">
             <div class="input-container">
               <label>Name</label>
-              <input [(ngModel)]="form.name" name="name" required placeholder="Signature Pizza...">
+              <input [(ngModel)]="form.name" name="name" required placeholder="e.g. Pepperoni Pizza">
             </div>
 
             <div class="row">
@@ -45,7 +45,15 @@
                 <label>Price</label>
                 <div class="price-input">
                   <span>$</span>
-                  <input [(ngModel)]="form.price" name="price" type="number" required>
+                  <input
+                    [(ngModel)]="form.price"
+                    name="price"
+                    type="number"
+                    required
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Price > 0"
+                  >
                 </div>
               </div>
 

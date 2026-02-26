@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import type { FoodItem } from '../models/food-item.interface';
+import { Food } from '../models/food.model'; // ✅ 引入统一的 Food 模型
 
 export interface CartEntry {
-  food: FoodItem;
+  food: Food; // ✅ 统一使用 Food
   quantity: number;
 }
 
@@ -22,9 +22,10 @@ export class CartService {
     return this.itemsSubject.value;
   }
 
-  // 添加
-  addItem(food: FoodItem, quantity = 1) {
+  // 添加 - 将 FoodItem 改为 Food
+  addItem(food: Food, quantity = 1) {
     const items = [...this.itemsSubject.value];
+    // 这里的 food.id 对应 Food 模型中的 id?: number
     const idx = items.findIndex(e => e.food.id === food.id);
 
     if (idx >= 0) {
@@ -40,7 +41,8 @@ export class CartService {
   }
 
   // 删除
-  removeItem(foodId: number) {
+  removeItem(foodId: number | undefined) { // ✅ 支持可选 id，增加健壮性
+    if (foodId === undefined) return;
     const items = this.itemsSubject.value.filter(e => e.food.id !== foodId);
     this.update(items);
   }
@@ -76,6 +78,11 @@ export class CartService {
 
   private loadFromStorage(): CartEntry[] {
     const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
+    try {
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error("Cart data corrupted", e);
+      return [];
+    }
   }
 }

@@ -1,19 +1,29 @@
-:host { display: block; height: 100%; }
+:host { 
+  display: block; 
+  height: 100%; 
+}
+
+/* 变量定义，确保主题色统一 */
+:host {
+  --red-600: #da0b0b;
+  --transition: 300ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
 
 .card-modern {
   border-radius: 14px;
   overflow: hidden;
   background: #ffffff;
   border: 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .card-modern:hover {
   transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(255, 139, 139, 0.12);
+  box-shadow: 0 16px 40px rgba(218, 11, 11, 0.12); /* 稍微调整了阴影颜色使其更温和 */
 }
 
-/* image region */
+/* Image region */
 .card-img-wrapper {
   position: relative;
   overflow: hidden;
@@ -33,7 +43,7 @@
   transform: scale(1.08);
 }
 
-/* image overlay (rating badge) */
+/* Image overlay (rating badge) */
 .card-img-overlay {
   position: absolute;
   top: 10px;
@@ -53,21 +63,45 @@
   }
 }
 
-/* body spacing */
+/* Body spacing */
 .p-3 {
   padding: 1.25rem;
 }
 
-/* price formatting */
+/* Title styling */
+h5 {
+  color: #222;
+  font-size: 1.1rem;
+}
+
+/* =========================================
+   ✅ Description Text Styling (新增/修改)
+   ========================================= */
+.description-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+  line-height: 1.5;
+  margin-top: 0.25rem;
+  /* 限制显示行数为 2 行，超出显示省略号 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6em; /* 保持高度一致，防止卡片高度抖动 */
+}
+
+/* Price formatting */
 .price {
   color: var(--red-600);
   font-weight: 800;
   font-size: 1.15rem;
 }
 
-/* button styling */
+/* Button styling */
 .btn-red {
-  background: #da0b0b;
+  background: var(--red-600);
   border: none;
   color: #ffffff;
   font-weight: 700;
@@ -84,24 +118,13 @@
   transform: translateY(0);
 }
 
-/* button pulse animation when added */
-.btn.active {
-  animation: pulse 300ms cubic-bezier(0.2, 0.9, 0.3, 1);
+/* Quantity Control Buttons */
+.btn-outline-danger {
+  border-width: 2px;
+  font-weight: bold;
 }
 
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(226, 69, 69, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 12px rgba(226, 69, 69, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(226, 69, 69, 0);
-  }
-}
-
-/* text utilities */
+/* Text utilities */
 .text-truncate {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -110,7 +133,7 @@
   overflow: hidden;
 }
 
-/* responsive adjustments */
+/* Responsive adjustments */
 @media (max-width: 576px) {
   .p-3 {
     padding: 1rem;
@@ -118,6 +141,12 @@
 
   .card-img-wrapper {
     height: 150px;
+  }
+
+  .description-text {
+    -webkit-line-clamp: 1; /* 移动端只显示一行描述以节省空间 */
+    line-clamp: 1;
+    min-height: auto;
   }
 
   .btn-sm {
