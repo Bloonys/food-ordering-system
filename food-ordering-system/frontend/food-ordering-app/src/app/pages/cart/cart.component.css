@@ -268,3 +268,21 @@
 .btn-primary:active {
   transform: translateY(0);
 }
+
+/* 底部“继续购物”按钮样式 */
+.btn-continue {
+  background: transparent;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: #636e72;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-continue:hover {
+  background: #f8f9fa;
+  border-color: #b2bec3;
+  color: #2d3436;
+}

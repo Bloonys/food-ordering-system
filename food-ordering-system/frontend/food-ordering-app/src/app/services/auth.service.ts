@@ -61,6 +61,7 @@ export class AuthService {
       tap(res => this.currentUserSubject.next(res.user))
     );
   }
+  
 
   private hasToken(): boolean {
     return !!localStorage.getItem('token');

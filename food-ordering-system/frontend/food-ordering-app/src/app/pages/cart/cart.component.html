@@ -1,85 +1,63 @@
 <div class="cart-container container">
-  <h2 class="cart-title">Your Shopping Cart</h2>
+  <div class="cart-header d-flex justify-content-between align-items-center mb-4">
+    <h2 class="cart-title m-0">Your Shopping Cart</h2>
+  </div>
 
   <div *ngIf="(cart.items$ | async) as items; else loading">
 
-    <!-- Empty -->
     <div *ngIf="items.length === 0" class="empty-cart">
       <i class="bi bi-cart-x"></i>
       <p>Your cart is empty. Time to order some delicious pizza!</p>
       <button routerLink="/" class="btn-primary">Go to Menu</button>
     </div>
 
-    <!-- Items List -->
     <div class="cart-items-list">
-
       <div *ngFor="let entry of items" class="cart-item">
-
-        <!-- 图片 -->
         <div class="item-image">
-
           <div class="image-box">
-            <img
-              [src]="entry.food.image ? (environment.apiUrl + entry.food.image) : 'assets/no-image.png'"
-              [alt]="entry.food.name">
+            <img [src]="entry.food.image ? (environment.apiUrl + entry.food.image) : 'assets/no-image.png'" [alt]="entry.food.name">
           </div>
-
         </div>
-        <!-- 信息 -->
         <div class="item-info">
           <strong class="item-name">{{ entry.food.name }}</strong>
           <p class="item-price">Price: {{ entry.food.price | currency }}</p>
         </div>
-
-        <!-- 控制 -->
         <div class="item-controls">
-
-          <!-- 数量 -->
           <div class="qty-controls d-flex align-items-center gap-2">
-            <button
-              class="btn btn-sm btn-outline-danger"
-              (click)="cart.addItem(entry.food, -1)"
-              [disabled]="entry.quantity <= 1">
+            <button class="btn btn-sm btn-outline-danger" (click)="cart.addItem(entry.food, -1)" [disabled]="entry.quantity <= 1">
               <i class="bi bi-dash"></i>
             </button>
-
             <span class="item-quantity">{{ entry.quantity }}</span>
-
-            <button
-              class="btn btn-sm btn-outline-danger"
-              (click)="cart.addItem(entry.food, 1)">
+            <button class="btn btn-sm btn-outline-danger" (click)="cart.addItem(entry.food, 1)">
               <i class="bi bi-plus"></i>
             </button>
           </div>
-
-          <!-- 编辑 / 删除 -->
           <div class="actions d-flex gap-2">
             <button class="btn-edit" (click)="edit(entry)">
               <i class="bi bi-pencil"></i> 
             </button>
-
-            <button
-              (click)="cart.removeItem(entry.food.id)"
-              class="btn-remove"
-              title="Remove Item">
+            <button (click)="cart.removeItem(entry.food.id)" class="btn-remove" title="Remove Item">
               <i class="bi bi-trash"></i> Remove
             </button>
           </div>
-
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
     <div *ngIf="items.length > 0" class="cart-footer">
       <hr />
       <div class="cart-summary">
         <h3 class="total-amount">Total: {{ cart.getTotal() | currency }}</h3>
 
         <div class="actions">
+          <button routerLink="/" class="btn-continue">
+            Buy More
+          </button>
+          
           <button (click)="cart.clear()" class="btn-clear">
             Clear Cart
           </button>
+          
           <button (click)="checkout()" class="btn-checkout">
             Checkout
           </button>
