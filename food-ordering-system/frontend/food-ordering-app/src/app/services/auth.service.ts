@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { CartService } from './cart.service'; // 确保路径正确
 
 @Injectable({
   providedIn: 'root'
@@ -8,20 +9,20 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:3000/auth';
 
-  // 1. 登录状态流
   private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
-  // 2. 当前用户信息流 (初始为 null)
   private currentUserSubject = new BehaviorSubject<any>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    // 如果页面刷新时已有 Token，尝试自动获取一次用户信息
+  constructor(
+    private http: HttpClient,
+    private cartService: CartService // 1. 注入 CartService
+  ) {
     if (this.hasToken()) {
       this.getProfile().subscribe({
         next: (res: any) => this.currentUserSubject.next(res.user),
-        error: () => this.logout() // Token 失效则自动登出
+        error: () => this.logout()
       });
     }
   }
@@ -33,8 +34,6 @@ export class AuthService {
           if (res?.token) {
             localStorage.setItem('token', res.token);
             localStorage.setItem('role', res.user.role);
-            
-            // 更新状态
             this.loggedInSubject.next(true);
             this.currentUserSubject.next(res.user); 
           }
@@ -42,18 +41,21 @@ export class AuthService {
       );
   }
 
+  // 2. 统一清理逻辑：在这里处理所有登出相关的清理
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     this.loggedInSubject.next(false);
-    this.currentUserSubject.next(null); // 清空用户信息
+    this.currentUserSubject.next(null);
+    
+    // ✅ 关键：在这里清空购物车，这样管理员登出也会生效
+    this.cartService.clear(); 
   }
 
   getRole(): string | null {
     return localStorage.getItem('role');
   }
 
-  // 获取用户信息的 API 请求
   getProfile() {
     return this.http.get<any>(`${this.apiUrl}/profile`).pipe(
       tap(res => this.currentUserSubject.next(res.user))

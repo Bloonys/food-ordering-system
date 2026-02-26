@@ -48,8 +48,6 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
-    // 执行清理逻辑
-    this.cartService.clear();
     this.authService.logout();
     this.router.navigate(['/login']);
   }
