@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // 1. 引入 ChangeDetectorRef
 import { FoodService } from '../../services/food.service';
 import { Router } from '@angular/router';
 import type { Food } from '../../models/food.model';
@@ -14,7 +14,6 @@ export class FoodAdminComponent implements OnInit {
 
   foods: Food[] = [];
   filteredFoods: Food[] = [];
-
   editing: Food | null = null;
 
   form: Food = {
@@ -25,13 +24,13 @@ export class FoodAdminComponent implements OnInit {
   };
 
   selectedFile: File | null = null;
-
   searchTerm: string = '';
 
   constructor(
     private foodService: FoodService,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private cdr: ChangeDetectorRef // 2. 注入服务
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +45,8 @@ export class FoodAdminComponent implements OnInit {
       next: (data) => {
         this.foods = data;
         this.filteredFoods = data;
+        // 3. 关键：手动触发变更检测，确保数据立即渲染
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
         console.error('Failed to load foods', err);
@@ -61,6 +62,8 @@ export class FoodAdminComponent implements OnInit {
     this.filteredFoods = this.foods.filter(food =>
       food.name.toLowerCase().includes(term)
     );
+    // 过滤后也建议触发一次，确保搜索结果即时响应
+    this.cdr.detectChanges();
   }
 
   // ================================
@@ -69,6 +72,7 @@ export class FoodAdminComponent implements OnInit {
   edit(food: Food): void {
     this.editing = food;
     this.form = { ...food };
+    this.cdr.detectChanges(); // 确保表单立即填入数据
   }
 
   cancel(): void {
@@ -80,35 +84,21 @@ export class FoodAdminComponent implements OnInit {
       description: ''
     };
     this.selectedFile = null;
+    this.cdr.detectChanges();
   }
 
-  // ================================
-  // File upload
-  // ================================
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+    this.cdr.detectChanges();
   }
 
   // ================================
   // Save (Create / Update)
   // ================================
   save(): void {
-
-    // ===== Validation =====
-    if (!this.form.name.trim()) {
-      alert('Name is required');
-      return;
-    }
-
-    if (!this.form.category.trim()) {
-      alert('Category is required');
-      return;
-    }
-
-    if (!this.form.price || this.form.price <= 0) {
-      alert('Price must be greater than 0');
-      return;
-    }
+    if (!this.form.name.trim()) { alert('Name is required'); return; }
+    if (!this.form.category.trim()) { alert('Category is required'); return; }
+    if (!this.form.price || this.form.price <= 0) { alert('Price must be greater than 0'); return; }
 
     const formData = new FormData();
     formData.append('name', this.form.name);
@@ -150,14 +140,8 @@ export class FoodAdminComponent implements OnInit {
     }
   }
 
-  // ================================
-  // Logout
-  // ================================
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
     this.auth.logout();  
     this.router.navigate(['/login']);
   }
-
 }

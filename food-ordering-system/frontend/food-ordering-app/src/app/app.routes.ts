@@ -17,11 +17,10 @@ export const routes: Routes = [
   { path: 'foods', component: FoodListComponent },
   { path: 'foods/edit/:id', component: FoodEditComponent },
   { path: 'foods/create', component: FoodCreateComponent },
-  { path: 'admin/foods', component: FoodAdminComponent },
+  { path: 'admin/foods', component: FoodAdminComponent, canActivate: [AuthGuard], data: { role: 'admin' } },
   { path: 'cart', component: CartComponent },
-
-
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // default to home
 
 ];
