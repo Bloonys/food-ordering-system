@@ -1,6 +1,23 @@
-const fs = require('fs').promises; // 使用 promise 版本的 fs
+const fs = require('fs').promises;
 const path = require('path');
 const Food = require('../models/food');
+const redisClient = require('../config/redis');
+
+/**
+ * 辅助函数：清除所有与食物相关的缓存
+ * 由于中间件使用的 key 是 cache:/api/foods... 
+ * 我们使用模糊匹配删除这些 key
+ */
+const clearFoodCache = async () => {
+  try {
+    const keys = await redisClient.keys('cache:/api/foods*');
+    if (keys.length > 0) {
+      await redisClient.del(keys);
+    }
+  } catch (err) {
+    console.error('Redis Clear Error:', err);
+  }
+};
 
 // Create
 exports.createFood = async (req, res) => {
@@ -9,9 +26,10 @@ exports.createFood = async (req, res) => {
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
     const food = await Food.create({ name, price, category, image, description });
+    
+    await clearFoodCache(); // 数据变动，清除缓存
     res.json(food);
   } catch (err) {
-    console.error('Create Error:', err); 
     res.status(500).json({ error: 'Failed to create food' });
   }
 };
@@ -20,7 +38,7 @@ exports.createFood = async (req, res) => {
 exports.getFoods = async (req, res) => {
   try {
     const foods = await Food.findAll();
-    res.json(foods);
+    res.json(foods); // 中间件会自动处理缓存写入
   } catch (err) {
     res.status(500).json({ error: 'Fetch failed' });
   }
@@ -31,7 +49,7 @@ exports.getFoodById = async (req, res) => {
   try {
     const food = await Food.findByPk(req.params.id);
     if (!food) return res.status(404).json({ error: 'Not found' });
-    res.json(food);
+    res.json(food); // 中间件会自动处理缓存写入
   } catch (err) {
     res.status(500).json({ error: 'Fetch failed' });
   }
@@ -45,15 +63,11 @@ exports.updateFood = async (req, res) => {
     if (!oldFood) return res.status(404).json({ error: 'Not found' });
 
     let imagePath = oldFood.image; 
-
     if (req.file) {
       if (oldFood.image) {
-        // 修复：解析文件名
         const oldFileName = path.basename(oldFood.image);
         const oldFilePath = path.join(__dirname, '../../uploads', oldFileName);
-        try {
-          await fs.unlink(oldFilePath);
-        } catch (e) { console.warn("Old file not found, skipping"); }
+        try { await fs.unlink(oldFilePath); } catch (e) { /* ignore */ }
       }
       imagePath = `/uploads/${req.file.filename}`;
     }
@@ -63,9 +77,9 @@ exports.updateFood = async (req, res) => {
       { where: { id: req.params.id } }
     );
 
+    await clearFoodCache(); // 更新后清除缓存
     res.json({ success: true });
   } catch (err) {
-    console.error('Update Error:', err);
     res.status(500).json({ error: 'Update failed' });
   }
 };
@@ -74,40 +88,23 @@ exports.updateFood = async (req, res) => {
 exports.deleteFood = async (req, res) => {
   try {
     const food = await Food.findByPk(req.params.id);
+    if (!food) return res.status(404).json({ error: 'Food item not found' });
 
-    if (!food) {
-      return res.status(404).json({ error: 'Food item not found' });
-    }
-
-    // 1. 先尝试删除数据库记录 (如果被订单占用，这里会直接抛出错误跳到 catch)
-    // 这样可以防止：数据库没删掉，图片却先被删了
     await food.destroy();
+    
+    await clearFoodCache(); // 删除后清除缓存
 
-    // 2. 数据库删除成功后，再删除物理图片
     if (food.image) {
-      // ✅ 修复：从路径中正确获取文件名
       const fileName = path.basename(food.image);
       const filePath = path.join(__dirname, '../../uploads', fileName);
-      
-      try {
-        await fs.unlink(filePath);
-      } catch (e) {
-        console.warn("Physical file delete failed or not exists:", filePath);
-      }
+      try { await fs.unlink(filePath); } catch (e) { /* ignore */ }
     }
 
     res.json({ success: true, message: 'Deleted successfully' });
-
   } catch (err) {
-    console.error('Delete Error details:', err);
-
-    // ✅ 针对外键约束报错的友好提示
     if (err.name === 'SequelizeForeignKeyConstraintError') {
-      return res.status(400).json({ 
-        error: 'Cannot delete: This food item is linked to existing orders.' 
-      });
+      return res.status(400).json({ error: 'Cannot delete: Item linked to orders.' });
     }
-
-    res.status(500).json({ error: 'Delete failed due to server error' });
+    res.status(500).json({ error: 'Delete failed' });
   }
 };
