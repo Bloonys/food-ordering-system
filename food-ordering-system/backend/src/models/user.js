@@ -48,6 +48,14 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('customer', 'admin', 'driver'),
     defaultValue: 'customer',
     allowNull: false
+  },
+  address: {
+    type: DataTypes.TEXT, // 地址可能很长，建议用 TEXT
+    allowNull: true
+  },
+  bank_card: { // 建议后端数据库字段用下划线风格
+    type: DataTypes.STRING(50),
+    allowNull: true
   }
 }, 
 {

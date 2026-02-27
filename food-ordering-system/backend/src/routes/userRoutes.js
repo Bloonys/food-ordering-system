@@ -5,31 +5,33 @@ const verifyToken = require('../middleware/authMiddleware');
 
 /**
  * Authentication Routes
- * 
- * POST /auth/register
+ * * POST /auth/register
  * - Register a new user
- * - Body: { username, email, password, confirmPassword }
- * 
- * POST /auth/login
+ * * POST /auth/login
  * - Login existing user
- * - Body: { email, password }
- * - Response: { token, user, expiresIn }
- * 
- * POST /auth/logout
+ * * POST /auth/logout
  * - Logout (client removes token)
  * - Protected route
- * 
- * GET /auth/profile
+ * * GET /auth/profile
  * - Get current user profile
- * - Protected route (requires valid JWT token)
+ * - Protected route
+ * * PUT /auth/profile
+ * - Update user profile (Username, Address, Bank Card)
+ * - Protected route
  */
 
-// Public routes
+// --- Public routes ---
 router.post('/register', userController.register);
 router.post('/login', userController.login);
 
-// Protected routes (require valid JWT token)
+// --- Protected routes (require valid JWT token) ---
 router.post('/logout', verifyToken, userController.logout);
+
+// 获取用户信息
 router.get('/profile', verifyToken, userController.getProfile);
+
+// 更新用户信息 (这是新增的路由)
+// 使用 PUT 方法来符合 RESTful 规范，对应 userController.updateProfile
+router.put('/profile', verifyToken, userController.updateProfile);
 
 module.exports = router;

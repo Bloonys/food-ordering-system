@@ -74,11 +74,12 @@
         <p>{{ user.address || 'No address saved.' }}</p>
       </div>
 
-      <textarea *ngIf="isEditing"
-                [(ngModel)]="editUser.address"
-                class="textarea-field"
-                placeholder="Enter shipping address">
-      </textarea>
+      <input *ngIf="isEditing"
+            #addressInput
+            type="text"
+            [(ngModel)]="editUser.address"
+            class="input-field"
+            placeholder="Start typing your address..." />
     </div>
 
     <!-- 银行卡 -->
