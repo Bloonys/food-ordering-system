@@ -1,85 +1,108 @@
-<div class="console-wrapper">
-  <div class="console-header">
-    <div class="breadcrumb">Account / <span class="active">Settings</span></div>
-    <div class="user-meta-header" *ngIf="user">
-      <span class="role-chip" [attr.data-role]="user.role">{{ user.role }}</span>
-    </div>
-  </div>
+<div class="profile-wrapper" *ngIf="user">
 
-  <div class="console-layout">
-    <aside class="console-sidebar">
-      <nav>
-        <a class="nav-link active"><i class="bi bi-person"></i> General</a>
-        <a class="nav-link"><i class="bi bi-geo-alt"></i> Addresses</a>
-        <a class="nav-link"><i class="bi bi-credit-card"></i> Billing</a>
-        <a class="nav-link"><i class="bi bi-shield-lock"></i> Security</a>
-      </nav>
+  <div class="profile-card">
 
-      <div class="sidebar-footer">
-        <button class="logout-link" (click)="logout()">
-          <i class="bi bi-box-arrow-left"></i> Sign out
+    <!-- 顶部 -->
+    <div class="profile-header">
+      <div class="avatar">
+        {{ user.username[0] | uppercase }}
+      </div>
+
+      <div class="header-info">
+
+        <!-- 非编辑模式 -->
+        <h2 *ngIf="!isEditing">{{ user.username }}</h2>
+
+        <!-- 编辑模式 -->
+        <input *ngIf="isEditing"
+               type="text"
+               [(ngModel)]="editUser.username"
+               class="input-field" />
+
+        <p>Member since {{ user.created_at | date:'MMMM yyyy' }}</p>
+      </div>
+
+      <div class="header-actions">
+
+        <button *ngIf="!isEditing"
+                class="btn-primary"
+                (click)="startEdit()">
+          Edit
         </button>
-      </div>
-    </aside>
 
-    <main class="console-body" *ngIf="user">
+        <div *ngIf="isEditing" class="edit-actions">
+          <button class="btn-success" (click)="save()">Save</button>
+          <button class="btn-secondary" (click)="cancel()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 基本信息 -->
+    <div class="section">
+      <h3>Account Information</h3>
+        <div class="row">
+        <label>Role</label>
+        <span class="role-chip" [attr.data-role]="user.role">
+          {{ user.role }}
+        </span>
+      </div>
+
+      <div class="row">
+        <label>Email</label>
+        <span>{{ user.email }}</span>
+      </div>
+
+      <div class="row">
+        <label>Username</label>
+
+        <span *ngIf="!isEditing">@{{ user.username }}</span>
+
+        <input *ngIf="isEditing"
+               type="text"
+               [(ngModel)]="editUser.username"
+               class="input-field" />
+      </div>
       
-      <section class="settings-group">
-        <h3 class="group-title">Public Profile</h3>
-        <div class="settings-card">
-          <div class="profile-header-flex">
-            <div class="avatar-static">{{ user.username[0] | uppercase }}</div>
-            <div class="header-text">
-              <h4>{{ user.username }}</h4>
-              <p>Member since {{ user.created_at | date:'MMMM yyyy' }}</p>
-            </div>
-            <button *ngIf="user.role === 'admin'" 
-                    routerLink="/admin/foods" 
-                    class="btn-console-primary">
-              Admin Panel
-            </button>
-          </div>
-        </div>
-      </section>
+    </div>
 
-      <section class="settings-group">
-        <h3 class="group-title">Account Details</h3>
-        <div class="settings-card no-padding">
-          <div class="data-row">
-            <span class="label">Email address</span>
-            <span class="value">{{ user.email }}</span>
-          </div>
-          <div class="data-row">
-            <span class="label">Username</span>
-            <span class="value">@{{ user.username }}</span>
-          </div>
-        </div>
-      </section>
+    <!-- 地址 -->
+    <div class="section">
+      <h3>Shipping Address</h3>
 
-      <div class="split-rows">
-        <section class="settings-group">
-          <h3 class="group-title">Shipping Address</h3>
-          <div class="settings-card address-box">
-            <div class="empty-notif">
-              <i class="bi bi-house-door"></i>
-              <span>No addresses saved yet.</span>
-              <button class="text-btn">+ Add</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="settings-group">
-          <h3 class="group-title">Default Payment</h3>
-          <div class="settings-card payment-box">
-            <div class="empty-notif">
-              <i class="bi bi-credit-card"></i>
-              <span>No payment methods.</span>
-              <button class="text-btn">+ Add</button>
-            </div>
-          </div>
-        </section>
+      <div *ngIf="!isEditing">
+        <p>{{ user.address || 'No address saved.' }}</p>
       </div>
 
-    </main>
+      <textarea *ngIf="isEditing"
+                [(ngModel)]="editUser.address"
+                class="textarea-field"
+                placeholder="Enter shipping address">
+      </textarea>
+    </div>
+
+    <!-- 银行卡 -->
+    <div class="section">
+      <h3>Bank Card</h3>
+
+      <div *ngIf="!isEditing">
+        <p>{{ user.bankCard || 'No bank card added.' }}</p>
+      </div>
+
+      <input *ngIf="isEditing"
+             type="text"
+             [(ngModel)]="editUser.bankCard"
+             class="input-field"
+             placeholder="Enter bank card number" />
+    </div>
+
+    <!-- 退出 -->
+    <div class="footer">
+      <button class="btn-danger" (click)="logout()">
+        Sign Out
+      </button>
+    </div>
+
   </div>
+
 </div>

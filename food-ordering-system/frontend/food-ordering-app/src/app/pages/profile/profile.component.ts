@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -11,23 +10,26 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+
   user: any;
+
+  isEditing = false;
+  editUser: any = {};
 
   constructor(
     private authService: AuthService,
     private cartService: CartService,
     private router: Router,
-    private cdr: ChangeDetectorRef // 注入变更检测
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // 1. 首先尝试从 AuthService 订阅用户信息
+
     this.authService.currentUser$.subscribe(userData => {
       if (userData) {
         this.user = userData;
-        this.cdr.detectChanges(); // 强制刷新视图
+        this.cdr.detectChanges();
       } else {
-        // 2. 如果当前没有用户信息（例如刷新页面），手动触发一次加载
         this.loadProfileFromServer();
       }
     });
@@ -39,10 +41,46 @@ export class ProfileComponent implements OnInit {
         this.user = res.user;
         this.cdr.detectChanges();
       },
-      error: (err: any) => {
-        console.error('Failed to load profile:', err);
-        // 如果 401 或报错，可能 token 过期，跳回登录
+      error: () => {
         this.router.navigate(['/login']);
+      }
+    });
+  }
+  
+
+  startEdit() {
+    this.isEditing = true;
+
+    // 深拷贝，避免污染原数据
+    this.editUser = {
+      username: this.user.username,
+      address: this.user.address || '',
+      bankCard: this.user.bankCard || ''
+    };
+  }
+
+  cancel() {
+    this.isEditing = false;
+  }
+
+  save() {
+
+    const payload = {
+      username: this.editUser.username,
+      address: this.editUser.address,
+      bankCard: this.editUser.bankCard
+    };
+
+    this.authService.updateProfile(payload).subscribe({
+      next: (res: any) => {
+
+        // 更新全局 currentUser$
+        this.authService.setCurrentUser(res.user);
+
+        this.isEditing = false;
+      },
+      error: (err: any) => {
+        console.error('Update failed:', err);
       }
     });
   }

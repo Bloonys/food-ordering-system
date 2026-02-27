@@ -61,6 +61,15 @@ export class AuthService {
       tap(res => this.currentUserSubject.next(res.user))
     );
   }
+  updateProfile(data: any) {
+    return this.http.put<any>(`${this.apiUrl}/profile`, data).pipe(
+      tap(res => this.currentUserSubject.next(res.user))
+    );
+  }
+
+  setCurrentUser(user: any) {
+    this.currentUserSubject.next(user);
+  }
   
 
   private hasToken(): boolean {
