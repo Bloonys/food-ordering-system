@@ -1,55 +1,95 @@
 <header class="app-header">
   <div class="header-row container-fluid py-2 d-flex align-items-center justify-content-between">
     
-    <!-- Brand -->
-    <div class="brand-name-container">
+    <div class="brand-name-container d-flex align-items-center">
       <a class="brand-link" routerLink="/home">
         <i class="bi bi-pizza brand-icon-small"></i>
         <span class="brand-name">SomeHow♥Pizza</span>
       </a>
+
+      <div class="header-address-pill ms-3 d-none d-md-flex" 
+           *ngIf="isLoggedIn$ | async" 
+           (click)="toggleModal()">
+        <span class="mode-text">{{ orderMode === 'delivery' ? 'Delivery' : 'Pickup' }}</span>
+        <span class="address-val text-truncate">
+          {{ orderMode === 'delivery' ? (tempAddress || 'Select Address') : 'Shop Location' }}
+        </span>
+        <i class="bi bi-chevron-down ms-1"></i>
+      </div>
     </div>
 
     <div class="header-right d-flex align-items-center gap-2">
-
-      <!-- 未登录 -->
-      <a
-        *ngIf="!(isLoggedIn$ | async)"
-        class="btn-icon-text"
-        routerLink="/login"
-      >
+      <a *ngIf="!(isLoggedIn$ | async)" class="btn-icon-text" routerLink="/login">
         <i class="bi bi-person-fill"></i>
         <span class="action-label d-none d-sm-inline">Login</span>
       </a>
 
-      <!-- 管理员 -->
-      <a
-        *ngIf="(isLoggedIn$ | async) && role === 'admin'"
-        class="btn-icon-text"
-        routerLink="/admin/foods"
-      >
+      <a *ngIf="(isLoggedIn$ | async) && role === 'admin'" class="btn-icon-text" routerLink="/admin/foods">
         <i class="bi bi-gear-fill"></i>
         <span class="action-label d-none d-sm-inline">Manage</span>
       </a>
 
-      <!-- 已登录 -->
-      <a
-        *ngIf="isLoggedIn$ | async"
-        class="btn-icon-text"
-        routerLink="/profile"
-      >
+      <a *ngIf="isLoggedIn$ | async" class="btn-icon-text" routerLink="/profile">
         <i class="bi bi-person-circle"></i>
         <span class="action-label d-none d-sm-inline">Profile</span>
       </a>
 
-      <!-- Cart -->
       <a class="btn-icon-text cart-button" routerLink="/cart">
         <i class="bi bi-cart-fill"></i>
-        <span *ngIf="(cartCount$ | async) as c" class="cart-badge">
-          {{ c }}
-        </span>
+        <span *ngIf="(cartCount$ | async) as c" class="cart-badge">{{ c }}</span>
         <span class="action-label d-none d-sm-inline ms-1">Cart</span>
       </a>
-
     </div>
   </div>
 </header>
+
+<div class="location-modal-backdrop" *ngIf="showLocationModal" (click)="toggleModal()">
+  <div class="location-card" (click)="$event.stopPropagation()">
+    <div class="card-header d-flex justify-content-between align-items-center border-0 bg-white">
+      <h5 class="mb-0 fw-bold"></h5>
+      <button type="button" class="btn-close" (click)="toggleModal()"></button>
+    </div>
+    
+    <div class="card-body">
+      <div class="mode-toggle-group d-flex mb-4">
+        <button class="flex-fill btn" 
+                [class.btn-dark]="orderMode === 'delivery'" 
+                [class.btn-light]="orderMode !== 'delivery'"
+                (click)="setOrderMode('delivery')">
+          <i class="bi bi-bicycle me-2"></i>Delivery
+        </button>
+        <button class="flex-fill btn ms-2" 
+                [class.btn-dark]="orderMode === 'pickup'" 
+                [class.btn-light]="orderMode !== 'pickup'"
+                (click)="setOrderMode('pickup')">
+          <i class="bi bi-shop me-2"></i>Pickup
+        </button>
+      </div>
+
+      <div class="address-display-box p-3 rounded shadow-sm border">
+        <div *ngIf="orderMode === 'pickup'">
+          <label class="text-muted small">Store Address</label>
+          <div class="fw-bold d-flex align-items-center mt-1">
+            <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+            {{ shopAddress }}
+          </div>
+        </div>
+
+        <div *ngIf="orderMode === 'delivery'">
+          <label class="text-muted small">Deliver to</label>
+          <div class="d-flex align-items-center mt-1">
+            <i class="bi bi-house-door-fill text-primary me-2"></i>
+            <span class="fw-bold text-truncate">{{ tempAddress || 'No address set' }}</span>
+            <a routerLink="/profile" (click)="toggleModal()" class="ms-auto btn btn-sm btn-link text-decoration-none">Change</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer bg-white border-0 pb-4">
+      <button class="btn btn-danger w-100 fw-bold py-2" (click)="confirmLocation()">
+        Confirm Selection
+      </button>
+    </div>
+  </div>
+</div>

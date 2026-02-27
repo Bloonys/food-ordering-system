@@ -199,4 +199,68 @@
     right: -6px;
   }
 }
+.address-container {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 5px 12px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
 
+.address-container:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.address-text {
+  color: #333;
+  font-weight: 500;
+}
+
+/* 移动端适配：如果屏幕太小就隐藏中间的地址，或者通过其他方式显示 */
+@media (max-width: 768px) {
+  .address-container {
+    display: none !important;
+  }
+}
+/* Header 地址药丸样式 */
+.header-address-pill {
+  background: #f3f3f3;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+  max-width: 300px;
+}
+.header-address-pill:hover { background: #e8e8e8; }
+.mode-text { font-weight: 800; color: #e11e1e; margin-right: 8px; border-right: 1px solid #ccc; padding-right: 8px; }
+.address-val { color: #2d3436; font-weight: 500; }
+
+/* 弹窗遮罩 */
+.location-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 弹窗卡片 */
+.location-card {
+  background: rgb(255, 255, 255);
+  width: 90%;
+  max-width: 420px;
+  border-radius: 10px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.mode-toggle-group .btn { border-radius: 12px; font-weight: 600; }
+.address-display-box { background: #fafafa; }
