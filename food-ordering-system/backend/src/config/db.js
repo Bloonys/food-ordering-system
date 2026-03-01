@@ -2,16 +2,15 @@ const { Sequelize } = require("sequelize");
 require('dotenv').config();
 
 /**
- * 修改逻辑：
- * 1. 优先读取环境变量，方便 Docker 注入
- * 2. 默认值作为本地开发兜底
+ * read environment variables from .env file
+ * docker compose will override
  */
 const sequelize = new Sequelize(
   process.env.DB_NAME || "food_ordering",
   process.env.DB_USER || "dbeaver",
   process.env.DB_PASSWORD || "dbeaver123",
   {
-    // 在 Docker Compose 中，这里会被设置为 "db"
+    // Docker Compose host set to "db"
     host: process.env.DB_HOST || "localhost", 
     port: process.env.DB_PORT || 3306,
     dialect: process.env.DB_DIALECT || "mariadb",
@@ -23,7 +22,7 @@ const sequelize = new Sequelize(
       idle: 10000
     },
     dialectOptions: {
-      // 某些 MariaDB 版本在 Docker 中需要这个配置来处理时区或字符集
+      // MariaDB timezone
       connectTimeout: 60000 
     }
   }
