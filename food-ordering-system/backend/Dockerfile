@@ -18,4 +18,4 @@ RUN mkdir -p uploads
 EXPOSE 3000
 
 # 4. start the server
-CMD ["node", "app.js"]
+CMD ["node", "src/app.js"]

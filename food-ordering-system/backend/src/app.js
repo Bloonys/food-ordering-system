@@ -61,7 +61,7 @@ const initDb = async () => {
     console.log('✓ Database connection established successfully');
 
     // Docker 环境建议：初次运行用 alter: true，稳定后改回 false
-    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+    await sequelize.sync({ alter: true });
     console.log('✓ Database models synchronized');
   } catch (error) {
     console.error('✗ Database connection failed:', error.message);

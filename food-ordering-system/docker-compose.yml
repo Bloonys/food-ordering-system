@@ -12,32 +12,39 @@ services:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./init_db:/docker-entrypoint-initdb.d
-    # 新增：确保数据库真正准备好接受连接
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:alpine
+    container_name: food-redis
+    restart: always
+    ports:
+      - "6380:6379"
+
   backend:
     build: ./backend
     container_name: food-backend
     restart: always
+    # 🚀 显式加载 .env 文件，确保 process.env 能拿到数据
+    env_file:
+      - ./.env
     environment:
-      DB_HOST: db
-      DB_USER: dbeaver
-      DB_PASSWORD: dbeaver123
-      DB_NAME: food_ordering
-      NODE_ENV: development
-      FRONTEND_URL: http://localhost:4200
+      - DB_HOST=db
+      - REDIS_HOST=redis
+      - NODE_ENV=development
     ports:
       - "3001:3000"
     volumes:
       - ./backend/uploads:/usr/src/app/uploads
     depends_on:
       db:
-        condition: service_healthy # 只有数据库健康了才启动后端
+        condition: service_healthy
+      redis:
+        condition: service_started
 
   frontend:
     build: ./frontend/food-ordering-app
