@@ -8,7 +8,7 @@ import { CartEntry } from './cart.service';
 })
 export class OrderService {
 
-  private baseUrl = 'http://localhost:3000/api/orders';
+  private baseUrl = 'http://localhost:3001/api/orders';
 
   constructor(private http: HttpClient) {}
 

@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FoodService } from '../../services/food.service';
 import { Router } from '@angular/router';
-import { Food } from '../../models/food.model'; // 移除 type 关键字确保接口可用
+import { Food } from '../../models/food.model'; 
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../enviroments/enviroment';
 
 @Component({
   selector: 'app-food-admin',
@@ -11,6 +12,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./food-admin.component.css']
 })
 export class FoodAdminComponent implements OnInit {
+  // 🚩 将 environment 赋值给类属性，以便在 HTML 中使用
+  apiUrl = environment.apiUrl; 
 
   foods: Food[] = [];
   filteredFoods: Food[] = [];
@@ -41,7 +44,7 @@ export class FoodAdminComponent implements OnInit {
     this.foodService.getFoods().subscribe({
       next: (data) => {
         this.foods = data;
-        this.filterFoods(); // 统一调用过滤逻辑
+        this.filterFoods(); 
         this.cdr.detectChanges(); 
       },
       error: (err) => console.error('Failed to load foods', err)
@@ -61,9 +64,6 @@ export class FoodAdminComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // ================================
-  // 核心修复：Delete
-  // ================================
   delete(id: number | undefined): void {
     if (id === undefined) {
       alert("Error: Item ID not found");
@@ -73,16 +73,12 @@ export class FoodAdminComponent implements OnInit {
     if (confirm('Are you sure you want to delete this item?')) {
       this.foodService.deleteFood(id).subscribe({
         next: () => {
-          // 1. 从本地数组立即移除，给用户即时反馈
           this.foods = this.foods.filter(f => f.id !== id);
           this.filterFoods(); 
-          // 2. 重新从服务器同步一次数据
-          // this.loadFoods(); 
           alert('Item deleted successfully');
         },
         error: (err) => {
           console.error('Delete failed', err);
-          // 如果后端报错，通常是因为该菜品已存在于某些订单中（外键约束）
           alert('Delete failed: This item might be linked to existing orders.');
         }
       });

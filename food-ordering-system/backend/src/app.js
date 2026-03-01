@@ -51,8 +51,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/auth", userRoutes);
 
 // 静态文件服务
-app.use('/uploads', express.static(uploadDir));
-
+app.use('/api/uploads', express.static(uploadDir));app.use('/api/uploads', express.static(uploadDir));
 // ===== DATABASE INITIALIZATION =====
 // 封装成函数，便于在 Docker 中可能的重试逻辑
 const initDb = async () => {

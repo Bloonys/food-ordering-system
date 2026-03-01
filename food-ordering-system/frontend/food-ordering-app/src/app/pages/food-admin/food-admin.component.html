@@ -12,7 +12,6 @@
         <span class="value">{{ foods.length }}</span>
       </div>
 
-      <!-- Signout -->
       <button class="btn-signout" (click)="logout()">
         <i class="bi bi-box-arrow-right"></i> Sign Out
       </button>
@@ -21,9 +20,6 @@
 
   <div class="main-grid">
 
-    <!-- ======================= -->
-    <!-- Editor Section -->
-    <!-- ======================= -->
     <section class="editor-section">
       <div class="neon-card">
         <div class="card-inner">
@@ -76,7 +72,6 @@
               <textarea [(ngModel)]="form.description" name="description" rows="2"></textarea>
             </div>
 
-            <!-- File Upload -->
             <div class="file-drop-zone">
               <input type="file" (change)="onFileSelected($event)" id="p-file">
               <label for="p-file">
@@ -98,13 +93,9 @@
       </div>
     </section>
 
-    <!-- ======================= -->
-    <!-- List Section -->
-    <!-- ======================= -->
     <section class="list-section">
       <div class="section-title">Active Menu Items</div>
 
-      <!-- Search -->
       <div class="search-box">
         <input
           [(ngModel)]="searchTerm"
@@ -122,16 +113,12 @@
           [style.animation-delay]="i * 0.05 + 's'"
         >
           <div class="item-visual">
-
-            <!-- Image Display -->
             <img
               *ngIf="food.image"
-              [src]="'http://localhost:3000' + food.image"
+              [src]="apiUrl.replace('/auth', '') + food.image"
               alt="{{ food.name }}"
               class="food-thumb"
             />
-
-            <!-- Placeholder -->
             <div *ngIf="!food.image" class="placeholder-img">
               {{ food.name[0] }}
             </div>
