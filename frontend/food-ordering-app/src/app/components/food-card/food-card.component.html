@@ -1,0 +1,69 @@
+<article class="card-modern h-100 d-flex flex-column">
+
+  <div class="card-img-wrapper position-relative">
+    <img
+      [src]="environment.apiUrl + item.image"
+      class="card-img-cover"
+      [alt]="item.name">
+
+    <div class="card-img-overlay">
+      <span class="badge bg-danger px-2 py-1 fw-bold">
+        <i class="bi bi-star-fill me-1"></i>
+        4.8
+      </span>
+    </div>
+  </div>
+
+  <div class="p-3 d-flex flex-column flex-grow-1">
+
+    <h5 class="mb-1 fw-bold text-truncate" style="color:#222;">
+      {{ item.name }}
+    </h5>
+
+    <p class="description-text mb-3 flex-grow-1">
+      {{ item.description || 'No description available for this delicious dish.' }}
+    </p>
+
+    <div class="d-flex align-items-center justify-content-between mt-auto">
+
+      <div class="d-flex flex-column">
+        <span class="price fw-bold text-dark fs-5">
+          {{ item.price | currency:'USD':'symbol':'1.2-2' }}
+        </span>
+      </div>
+
+      <ng-container *ngIf="quantity === 0; else quantityControls">
+        <button
+          class="btn btn-sm btn-danger rounded-pill fw-bold d-flex align-items-center justify-content-center gap-1"
+          (click)="add()"
+          style="min-width:95px; height: 36px; transition: all 200ms ease;">
+          <i class="bi bi-plus-lg"></i>
+          Add
+        </button>
+      </ng-container>
+
+      <ng-template #quantityControls>
+        <div class="d-flex align-items-center gap-2">
+          <button
+            class="btn btn-sm btn-outline-danger rounded-circle p-0 d-flex align-items-center justify-content-center"
+            style="width: 32px; height: 32px;"
+            (click)="decrease()">
+            <i class="bi bi-dash"></i>
+          </button>
+
+          <span class="fw-bold fs-6" style="min-width: 20px; text-align: center;">
+            {{ quantity }}
+          </span>
+
+          <button
+            class="btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center"
+            style="width: 32px; height: 32px;"
+            (click)="increase()">
+            <i class="bi bi-plus"></i>
+          </button>
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</article>

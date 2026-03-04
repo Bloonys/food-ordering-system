@@ -1,0 +1,109 @@
+<div class="profile-wrapper" *ngIf="user">
+
+  <div class="profile-card">
+
+    <!-- 顶部 -->
+    <div class="profile-header">
+      <div class="avatar">
+        {{ user.username[0] | uppercase }}
+      </div>
+
+      <div class="header-info">
+
+        <!-- 非编辑模式 -->
+        <h2 *ngIf="!isEditing">{{ user.username }}</h2>
+
+        <!-- 编辑模式 -->
+        <input *ngIf="isEditing"
+               type="text"
+               [(ngModel)]="editUser.username"
+               class="input-field" />
+
+        <p>Member since {{ user.created_at | date:'MMMM yyyy' }}</p>
+      </div>
+
+      <div class="header-actions">
+
+        <button *ngIf="!isEditing"
+                class="btn-primary"
+                (click)="startEdit()">
+          Edit
+        </button>
+
+        <div *ngIf="isEditing" class="edit-actions">
+          <button class="btn-success" (click)="save()">Save</button>
+          <button class="btn-secondary" (click)="cancel()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 基本信息 -->
+    <div class="section">
+      <h3>Account Information</h3>
+        <div class="row">
+        <label>Role</label>
+        <span class="role-chip" [attr.data-role]="user.role">
+          {{ user.role }}
+        </span>
+      </div>
+
+      <div class="row">
+        <label>Email</label>
+        <span>{{ user.email }}</span>
+      </div>
+
+      <div class="row">
+        <label>Username</label>
+
+        <span *ngIf="!isEditing">@{{ user.username }}</span>
+
+        <input *ngIf="isEditing"
+               type="text"
+               [(ngModel)]="editUser.username"
+               class="input-field" />
+      </div>
+      
+    </div>
+
+    <!-- 地址 -->
+    <div class="section">
+      <h3>Shipping Address</h3>
+
+      <div *ngIf="!isEditing">
+        <p>{{ user.address || 'No address saved.' }}</p>
+      </div>
+
+      <input *ngIf="isEditing"
+            #addressInput
+            type="text"
+            [(ngModel)]="editUser.address"
+            class="input-field"
+            placeholder="Start typing your address..." />
+    </div>
+
+    <!-- 银行卡 -->
+    <div class="section">
+      <h3>Bank Card</h3>
+
+      <div *ngIf="!isEditing">
+        <p>{{ user.bankCard || 'No bank card added.' }}</p>
+      </div>
+
+      <input *ngIf="isEditing"
+             type="text"
+             [(ngModel)]="editUser.bankCard"
+             class="input-field"
+             placeholder="Enter bank card number" />
+    </div>
+
+    <!-- 退出 -->
+    <div class="footer">
+      <button class="btn-danger" (click)="logout()">
+        Sign Out
+      </button>
+    </div>
+
+  </div>
+
+</div>
