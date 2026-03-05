@@ -37,7 +37,7 @@ services:
       - REDIS_HOST=redis
       - NODE_ENV=development
     ports:
-      - "3001:3000"
+      - "3000:3000"
     volumes:
       - ./backend/uploads:/usr/src/app/uploads
     depends_on:
