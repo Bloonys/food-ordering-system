@@ -31,7 +31,7 @@ services:
     restart: always
     # 🚀 显式加载 .env 文件，确保 process.env 能拿到数据
     env_file:
-      - ./.env
+      - ./backend/.env
     environment:
       - DB_HOST=db
       - REDIS_HOST=redis
