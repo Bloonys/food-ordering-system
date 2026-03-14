@@ -4,7 +4,9 @@
     "bootstrap": "^5.3.8",
     "node-cron": "^4.2.1",
     "redis": "^5.11.0",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@types/google.maps": "^3.58.1",

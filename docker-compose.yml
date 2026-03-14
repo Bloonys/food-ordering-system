@@ -39,7 +39,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./backend/uploads:/usr/src/app/uploads
+      - ./backend:/usr/src/app          
+      - /usr/src/app/node_modules
     depends_on:
       db:
         condition: service_healthy

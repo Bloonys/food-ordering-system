@@ -22,6 +22,7 @@ import { FoodAdminComponent } from './pages/food-admin/food-admin.component';
 import { CartComponent } from './pages/cart/cart.component';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { OrdersComponent } from './pages/orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     FoodCreateComponent,
     FoodAdminComponent,
     CartComponent,
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,
