@@ -26,8 +26,9 @@
       </a>
       
       <a *ngIf="(isLoggedIn$ | async) && role === 'admin'" 
-         class="btn-icon-text position-relative" 
-         routerLink="/orders">
+        class="btn-icon-text position-relative" 
+        (click)="navigateToOrders()"
+        style="cursor: pointer;">
         <i class="bi bi-clipboard-check-fill"></i>
         <span class="action-label d-none d-sm-inline">Orders</span>
         <span *ngIf="showDot" class="header-notification-dot animate__animated animate__pulse animate__infinite"></span>

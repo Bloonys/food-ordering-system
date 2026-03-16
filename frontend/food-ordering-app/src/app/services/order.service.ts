@@ -39,4 +39,12 @@ export class OrderService {
       { headers: this.getAuthHeaders() }
     );
   }
+  // 
+  updateOrderStatus(orderId: number, status: string): Observable<any> {
+    return this.http.patch(
+      `${this.baseUrl}/${orderId}`, 
+      { status }, 
+      { headers: this.getAuthHeaders() }
+    );
+  }
 }

@@ -158,6 +158,7 @@ main {
 
 /* order nofitication*/
 .toast {
+  color: #ffd6d6;
   min-width: 300px;
   border-radius: 12px;
 }

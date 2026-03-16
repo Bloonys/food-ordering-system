@@ -264,3 +264,27 @@
 
 .mode-toggle-group .btn { border-radius: 12px; font-weight: 600; }
 .address-display-box { background: #fafafa; }
+
+/* ====== red dot ====== */
+.header-notification-dot {
+  position: absolute;
+  top: 4px;           
+  right: 6px;
+  width: 10px;       
+  height: 10px;
+  background-color: #ff0000; 
+  border-radius: 50%;
+  border: 2px solid #ffffff; 
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.5); 
+}
+
+/* 确保父容器有定位基准 */
+.btn-icon-text.position-relative {
+  position: relative !important;
+}
+
+/* 让点击手势更明显 */
+.cursor-pointer {
+  cursor: pointer;
+}

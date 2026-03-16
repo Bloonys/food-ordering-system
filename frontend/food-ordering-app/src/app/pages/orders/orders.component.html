@@ -5,7 +5,7 @@
       <h1>Orders</h1>
     </div>
     <div class="header-actions">
-      <button class="btn-refresh" (click)="loadOrders()">
+      <button class="btn-refresh" (click)="loadOrders()" title="Refresh Orders">
         <i class="bi bi-arrow-clockwise"></i>
       </button>
     </div>
@@ -15,10 +15,10 @@
     <aside class="side-panel">
       <div class="stat-card">
         <span class="label">Total Volume</span>
-        <span class="value">{{ orders.length }}</span>
+        <span class="value">{{ (orders$ | async)?.length || 0 }}</span>
       </div>
       <div class="helper-text">
-        <p>New orders will automatically appear at the top of the list.</p>
+        <p><i class="bi bi-info-circle"></i> Real-time sync is active. New orders will appear at the top.</p>
       </div>
     </aside>
 
@@ -27,13 +27,26 @@
         <div class="spinner"></div>
       </div>
 
-      <div *ngIf="!loading && orders.length > 0">
-        <div *ngFor="let order of pagedOrders" class="order-card">
+      <div *ngIf="!loading && (orders$ | async)?.length">
+        <div *ngFor="let order of pagedOrders" 
+             class="order-card" 
+             [class.new-order-highlight]="order.isNew === true">
+          
           <div class="card-body">
             <div class="order-meta">
-              <span class="order-id">#{{ order.id }}</span>
-              <span class="order-date">{{ order.createdAt || order.created_at | date:'MMM d, HH:mm' }}</span>
+              <span class="order-id">
+                #{{ order.id }}
+                <span *ngIf="order.isNew === true" 
+                      class="status-dot" 
+                      [attr.data-is-new]="true">
+                </span>
+              </span>
+              <span class="order-date">
+                <i class="bi bi-calendar3 me-1"></i>
+                {{ order.created_at | date:'MMM d, HH:mm' }}
+              </span>
             </div>
+            
             <div class="order-details">
               <span class="price">${{ order.total_amount }}</span>
               <span class="status-pill" [attr.data-status]="order.status?.toLowerCase()">
@@ -41,26 +54,46 @@
               </span>
             </div>
           </div>
+          
           <div class="card-actions">
-            <button class="btn-icon"><i class="bi bi-eye"></i></button>
-            <button class="btn-icon check"><i class="bi bi-check2-circle"></i></button>
+            <button class="btn-icon" (click)="viewDetails(order)" title="View Details">
+              <i class="bi bi-eye"></i>
+            </button>
+            
+            <button class="btn-icon check" 
+                    [disabled]="order.status === 'completed'"
+                    (click)="updateStatus(order, 'completed')" 
+                    title="Mark Completed">
+              <i class="bi bi-check2-circle"></i>
+            </button>
           </div>
         </div>
 
         <nav class="pagination" *ngIf="totalPages > 1">
-          <button class="page-arrow" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+          <button class="page-arrow" 
+                  [disabled]="currentPage === 1" 
+                  (click)="changePage(currentPage - 1)">
             <i class="bi bi-chevron-left"></i>
           </button>
-          <span class="page-number">Page {{ currentPage }} of {{ totalPages }}</span>
-          <button class="page-arrow" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+          
+          <span class="page-number">
+            Page <strong>{{ currentPage }}</strong> of {{ totalPages }}
+          </span>
+          
+          <button class="page-arrow" 
+                  [disabled]="currentPage === totalPages" 
+                  (click)="changePage(currentPage + 1)">
             <i class="bi bi-chevron-right"></i>
           </button>
         </nav>
       </div>
 
-      <div class="empty-state" *ngIf="!loading && orders.length === 0">
+      <div class="empty-state" *ngIf="!loading && (orders$ | async)?.length === 0">
         <i class="bi bi-inbox"></i>
         <p>No orders recorded yet.</p>
+        <button class="btn btn-sm btn-outline-primary mt-2" (click)="loadOrders()">
+          Check Again
+        </button>
       </div>
     </main>
   </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { SocketService } from '../../services/socket.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, map, take } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -10,14 +10,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit, OnDestroy {
-  // 数据源
-  orders: any[] = [];
+  // Use BehaviorSubject as a reactive data source
+  private ordersSubject = new BehaviorSubject<any[]>([]);
+  // The template will bind to this stream
+  orders$ = this.ordersSubject.asObservable();
+  
   loading: boolean = false;
-  
-  // 分页状态
   currentPage: number = 1;
-  pageSize: number = 6; // 每页显示数量
-  
+  pageSize: number = 6;
   private socketSub?: Subscription;
 
   constructor(
@@ -29,57 +29,90 @@ export class OrdersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadOrders();
     
-    // 监听实时订单通知
+    // Listen to the Socket stream
     this.socketSub = this.socketService.orderNotification$.subscribe(newOrder => {
       if (newOrder) {
-        this.handleNewOrder(newOrder);
+        this.addNewOrder(newOrder);
       }
     });
   }
 
   /**
-   * 获取所有订单
+   * Initial fetch: Load from API and push to the stream
    */
   loadOrders(): void {
     this.loading = true;
     this.orderService.getOrders().subscribe({
       next: (data) => {
-        // 按时间倒序
-        this.orders = data.sort((a: any, b: any) => 
-          new Date(b.createdAt || b.created_at).getTime() - new Date(a.createdAt || a.created_at).getTime()
-        );
+        const sortedData = data.map((o: any) => ({ ...o, isNew: false }))
+          .sort((a: any, b: any) => 
+            new Date(b.created_at || b.createdAt).getTime() - new Date(a.created_at || a.createdAt).getTime()
+          );
+        this.ordersSubject.next(sortedData);
         this.loading = false;
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Fetch error:', err);
-        this.loading = false;
-      }
+      error: () => (this.loading = false)
     });
   }
 
   /**
-   * 处理实时新订单
+   * Reactive approach to adding a new order
    */
-  private handleNewOrder(newOrder: any): void {
-    this.orders = [newOrder, ...this.orders];
-    this.currentPage = 1; // 自动跳转第一页查看新订单
+  private addNewOrder(newOrder: any): void {
+    const currentOrders = this.ordersSubject.getValue();
+
+    const mappedOrder = {
+        ...newOrder,
+        id: newOrder.orderId, // 注意：日志里是 orderId，不是 id
+        total_amount: newOrder.total, // 注意：日志里是 total，不是 total_amount
+        created_at: newOrder.time || new Date().toISOString(),
+        isNew: true 
+    };
+
+    console.log('🎨 [Orders] Adding Mapped Order to UI:', mappedOrder);
+
+    // 更新流并强制回到第一页
+    this.ordersSubject.next([mappedOrder, ...currentOrders]);
+    this.currentPage = 1; 
+    this.cdr.detectChanges();
+    }
+
+  /**
+   * Helper to update a single order property within the RxJS stream
+   */
+  private updateSingleOrderProperty(orderId: any, key: string, value: any): void {
+    const updatedOrders = this.ordersSubject.getValue().map(o => 
+      (o.id === orderId) ? { ...o, [key]: value } : o
+    );
+    this.ordersSubject.next(updatedOrders);
     this.cdr.detectChanges();
   }
 
-  /**
-   * 分页逻辑：获取当前页显示的数据
-   */
-  get pagedOrders() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return this.orders.slice(startIndex, startIndex + this.pageSize);
+  viewDetails(order: any): void {
+    this.updateSingleOrderProperty(order.id, 'isNew', false);
   }
 
-  /**
-   * 计算总页数
-   */
+  updateStatus(order: any, newStatus: string): void {
+    this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
+      next: () => {
+        const updated = this.ordersSubject.getValue().map(o => 
+          (o.id === order.id) ? { ...o, status: newStatus, isNew: false } : o
+        );
+        this.ordersSubject.next(updated);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // Use a getter with the Subject's current value for pagination
+  get pagedOrders() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.ordersSubject.getValue().slice(startIndex, startIndex + this.pageSize);
+  }
+
   get totalPages() {
-    return Math.ceil(this.orders.length / this.pageSize);
+    return Math.ceil(this.ordersSubject.getValue().length / this.pageSize);
   }
 
   changePage(page: number) {
@@ -90,8 +123,6 @@ export class OrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.socketSub) {
-      this.socketSub.unsubscribe();
-    }
+    if (this.socketSub) this.socketSub.unsubscribe();
   }
 }
