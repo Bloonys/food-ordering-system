@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core'; // Added Input
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
-import { map, Observable, take } from 'rxjs';
+import { Router } from '@angular/router'; // Added Router for navigation
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,22 +11,22 @@ import { map, Observable, take } from 'rxjs';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  // Received from App Component via [showDot]="hasUnreadOrders()"
+  @Input() showDot: boolean = false;
+
   isLoggedIn$: Observable<boolean>;
   cartCount$: Observable<number>;
   currentUser$: Observable<any>;
 
-  // 控制小窗口显示
   showLocationModal = false;
-  // 配送模式：delivery 或 pickup
   orderMode: 'delivery' | 'pickup' = 'delivery';
-  // 弹窗中显示的临时地址（从用户资料获取）
   tempAddress: string = '';
-  // 你的店铺固定地址
   shopAddress: string = 'Somewhere in Edmonton';
 
   constructor(
     private cart: CartService,
-    public auth: AuthService
+    public auth: AuthService,
+    private router: Router // Injected Router
   ) {
     this.isLoggedIn$ = this.auth.isLoggedIn$;
     this.currentUser$ = this.auth.currentUser$;
@@ -36,12 +37,16 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 初始订阅一次地址，用于弹窗默认值
     this.auth.currentUser$.subscribe(user => {
       if (user && user.address) {
         this.tempAddress = user.address;
       }
     });
+  }
+
+  // Navigation specifically for orders (can be used to clear state if needed)
+  navigateToOrders() {
+    this.router.navigate(['/orders']);
   }
 
   toggleModal() {
@@ -53,9 +58,7 @@ export class HeaderComponent implements OnInit {
   }
 
   confirmLocation() {
-    // 如果是外送且地址发生了变化，可以同步更新后端（可选）
     if (this.orderMode === 'delivery' && this.tempAddress) {
-      // 这里的逻辑可以根据你的需求调整，是否保存到数据库
       console.log('Confirming delivery to:', this.tempAddress);
     }
     this.showLocationModal = false;

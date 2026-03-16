@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class SocketService {
   private socket: Socket;
+  public orderNotification$ = new Subject<any>();
 
   constructor() {
     // 🚩 Robust parsing logic: Extract protocol + domain + port
@@ -20,8 +21,10 @@ export class SocketService {
     console.log('🔌 Socket.io attempting to connect to:', serverUrl);
 
     this.socket = io(serverUrl, {
-      transports: ['websocket', 'polling'], // Support multiple transport protocols
-      withCredentials: true
+      transports: ['websocket'], 
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
     });
 
     // Listen for successful connection

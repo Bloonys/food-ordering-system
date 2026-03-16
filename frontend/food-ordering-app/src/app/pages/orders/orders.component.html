@@ -1,44 +1,67 @@
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-white">Order Management</h2>
-    <span class="badge bg-info">{{ orders.length }} Total Orders</span>
-  </div>
+<div class="premium-wrapper">
+  <header class="main-header">
+    <div class="title-group">
+      <span class="badge-accent">Live Dashboard</span>
+      <h1>Orders</h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="loadOrders()">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+  </header>
 
-  <div *ngIf="loading" class="text-center text-white">
-    <div class="spinner-border" role="status"></div>
-    <p>Loading orders...</p>
-  </div>
+  <div class="main-grid">
+    <aside class="side-panel">
+      <div class="stat-card">
+        <span class="label">Total Volume</span>
+        <span class="value">{{ orders.length }}</span>
+      </div>
+      <div class="helper-text">
+        <p>New orders will automatically appear at the top of the list.</p>
+      </div>
+    </aside>
 
-  <div class="table-responsive" *ngIf="!loading">
-    <table class="table table-dark table-hover align-middle">
-      <thead>
-        <tr>
-          <th>Order ID</th>
-          <th>Time</th>
-          <th>Total Amount</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of orders" class="animate-in">
-          <td>#{{ order.id }}</td>
-          <td>{{ order.createdAt | date:'short' }}</td>
-          <td class="text-success fw-bold">${{ order.total_amount }}</td>
-          <td>
-            <span [ngClass]="getStatusClass(order.status)">
-              {{ order.status | uppercase }}
-            </span>
-          </td>
-          <td>
-            <button class="btn btn-sm btn-outline-primary">View Details</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <main class="content-area">
+      <div *ngIf="loading" class="loader">
+        <div class="spinner"></div>
+      </div>
 
-  <div *ngIf="!loading && orders.length === 0" class="alert alert-dark text-center">
-    No orders found.
+      <div *ngIf="!loading && orders.length > 0">
+        <div *ngFor="let order of pagedOrders" class="order-card">
+          <div class="card-body">
+            <div class="order-meta">
+              <span class="order-id">#{{ order.id }}</span>
+              <span class="order-date">{{ order.createdAt || order.created_at | date:'MMM d, HH:mm' }}</span>
+            </div>
+            <div class="order-details">
+              <span class="price">${{ order.total_amount }}</span>
+              <span class="status-pill" [attr.data-status]="order.status?.toLowerCase()">
+                {{ order.status }}
+              </span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn-icon"><i class="bi bi-eye"></i></button>
+            <button class="btn-icon check"><i class="bi bi-check2-circle"></i></button>
+          </div>
+        </div>
+
+        <nav class="pagination" *ngIf="totalPages > 1">
+          <button class="page-arrow" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <span class="page-number">Page {{ currentPage }} of {{ totalPages }}</span>
+          <button class="page-arrow" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </nav>
+      </div>
+
+      <div class="empty-state" *ngIf="!loading && orders.length === 0">
+        <i class="bi bi-inbox"></i>
+        <p>No orders recorded yet.</p>
+      </div>
+    </main>
   </div>
 </div>

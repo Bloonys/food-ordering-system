@@ -10,8 +10,14 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit, OnDestroy {
+  // 数据源
   orders: any[] = [];
   loading: boolean = false;
+  
+  // 分页状态
+  currentPage: number = 1;
+  pageSize: number = 6; // 每页显示数量
+  
   private socketSub?: Subscription;
 
   constructor(
@@ -22,68 +28,68 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadOrders();
-    this.initSocketListener();
+    
+    // 监听实时订单通知
+    this.socketSub = this.socketService.orderNotification$.subscribe(newOrder => {
+      if (newOrder) {
+        this.handleNewOrder(newOrder);
+      }
+    });
   }
 
   /**
-   * Fetch the initial list of orders
+   * 获取所有订单
    */
   loadOrders(): void {
     this.loading = true;
     this.orderService.getOrders().subscribe({
       next: (data) => {
-        // Sort orders by date descending (newest on top)
+        // 按时间倒序
         this.orders = data.sort((a: any, b: any) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt || b.created_at).getTime() - new Date(a.createdAt || a.created_at).getTime()
         );
         this.loading = false;
-        this.cdr.detectChanges(); // Manually trigger change detection
+        this.cdr.detectChanges(); 
       },
       error: (err) => {
-        console.error('Failed to load orders', err);
+        console.error('Fetch error:', err);
         this.loading = false;
       }
     });
   }
 
   /**
-   * Initialize Socket.io listener for real-time updates
+   * 处理实时新订单
    */
-  initSocketListener(): void {
-    // Using onEvent to subscribe to the 'new-order' event
-    this.socketSub = this.socketService.onEvent('new-order').subscribe({
-      next: (newOrder) => {
-        console.log('Real-time order received:', newOrder);
-        
-        // Strategy: Automatically refresh the list when a notification is received
-        // Alternatively, you could push the single newOrder into the array manually
-        this.loadOrders(); 
-        
-        // Optional: Play a notification sound
-        this.playNotificationSound();
-      }
-    });
-  }
-
-  playNotificationSound(): void {
-    const audio = new Audio('assets/notification.mp3'); // Ensure file exists in assets folder
-    audio.play().catch(e => console.log('Audio playback blocked or failed:', e));
+  private handleNewOrder(newOrder: any): void {
+    this.orders = [newOrder, ...this.orders];
+    this.currentPage = 1; // 自动跳转第一页查看新订单
+    this.cdr.detectChanges();
   }
 
   /**
-   * Map order status to Bootstrap CSS classes
+   * 分页逻辑：获取当前页显示的数据
    */
-  getStatusClass(status: string): string {
-    const statusMap: any = {
-      'pending': 'badge bg-warning text-dark',
-      'completed': 'badge bg-success',
-      'cancelled': 'badge bg-danger'
-    };
-    return statusMap[status] || 'badge bg-secondary';
+  get pagedOrders() {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.orders.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  /**
+   * 计算总页数
+   */
+  get totalPages() {
+    return Math.ceil(this.orders.length / this.pageSize);
+  }
+
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe to prevent memory leaks and redundant listeners
     if (this.socketSub) {
       this.socketSub.unsubscribe();
     }

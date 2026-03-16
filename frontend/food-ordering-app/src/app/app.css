@@ -155,3 +155,19 @@ main {
     padding-right: 1.5rem;
   }
 }
+
+/* order nofitication*/
+.toast {
+  min-width: 300px;
+  border-radius: 12px;
+}
+
+/* animation (if no animate.css) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate__fadeInDown {
+  animation: fadeInDown 0.5s ease-out;
+}

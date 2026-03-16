@@ -1,51 +1,66 @@
-<!-- App shell with header, sidebar, and main content area -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 9999;">
+  @if (notification()) {
+    <div class="toast show align-items-center text-white bg-primary border-0 shadow-lg animate__animated animate__fadeInDown" role="alert">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center">
+          <i class="bi bi-bell-fill me-2 animate__animated animate__swing animate__infinite"></i>
+          <div>
+            <strong>New Order!</strong><br>
+            <small>{{ notification()?.message }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" (click)="notification.set(null)"></button>
+      </div>
+      <div class="progress" style="height: 2px; background-color: rgba(255,255,255,0.2);">
+        <div class="progress-bar bg-white" role="progressbar" style="width: 100%"></div>
+      </div>
+    </div>
+  }
+</div>
+
 <app-header></app-header>
 
 <div class="app-wrapper">
-  <!-- Sidebar Navigation -->
   <app-nav></app-nav>
 
-  <!-- Main Content Area -->
   <main class="main-content">
-    <!-- Routed pages will be injected here -->
     <router-outlet></router-outlet>
   </main>
 </div>
 
 <footer class="commercial-footer">
-	<div class="container py-4">
-		<div class="row">
-			<div class="col-md-4 mb-3 mb-md-0">
-				<h6 class="fw-bold mb-2">About SomehowPizza</h6>
-				<p class="small text-muted mb-0">Delivering fresh, hot pizzas to your door since day one.</p>
-			</div>
-			<div class="col-md-4 mb-3 mb-md-0">
-				<h6 class="fw-bold mb-2">Quick Links</h6>
-				<ul class="list-unstyled small">
-					<li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
-					<li><a href="#" class="text-decoration-none text-muted">Terms & Conditions</a></li>
-					<li><a href="#" class="text-decoration-none text-muted">Contact Us</a></li>
-				</ul>
-			</div>
-			<div class="col-md-4">
-				<h6 class="fw-bold mb-2">Follow Us</h6>
-				<div class="d-flex gap-2">
-					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Facebook">
-						<i class="bi bi-facebook"></i>
-					</a>
-					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Instagram">
-						<i class="bi bi-instagram"></i>
-					</a>
-					<a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Twitter">
-						<i class="bi bi-twitter-x"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-		<hr class="my-3">
-		<div class="text-center small text-muted">
-			&copy; 2026 SomehowPizza. All rights reserved.
-		</div>
-	</div>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h6 class="fw-bold mb-2">About SomehowPizza</h6>
+                <p class="small text-muted mb-0">Delivering fresh, hot pizzas to your door since day one.</p>
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h6 class="fw-bold mb-2">Quick Links</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="#" class="text-decoration-none text-muted">Privacy Policy</a></li>
+                    <li><a href="#" class="text-decoration-none text-muted">Terms & Conditions</a></li>
+                    <li><a href="#" class="text-decoration-none text-muted">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-2">Follow Us</h6>
+                <div class="d-flex gap-2">
+                    <a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Facebook">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Instagram">
+                        <i class="bi bi-instagram"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-light rounded-circle" aria-label="Twitter">
+                        <i class="bi bi-twitter-x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-3">
+        <div class="text-center small text-muted">
+            &copy; 2026 SomehowPizza. All rights reserved.
+        </div>
+    </div>
 </footer>
-
