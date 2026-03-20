@@ -87,14 +87,26 @@ exports.createOrder = async (req, res) => {
 };
 
 /**
- * Get User Orders
+ * Get User Orders (Admin sees all, User sees their own)
  */
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await Order.findAll({
-      where: { user_id: req.user.userId },
-      order: [['created_at', 'DESC']] // Sort by newest first
-    });
+    // 假设你的 JWT 中间件在 req.user 中存了角色信息（例如 role: 'admin'）
+    const { userId, role } = req.user; 
+
+    let queryOptions = {
+      order: [['created_at', 'DESC']]
+    };
+
+    // 如果不是管理员，才添加 user_id 过滤条件
+    if (role !== 'admin') {
+      queryOptions.where = { user_id: userId };
+      console.log(`ℹ️ [OrderController] Fetching orders for user: ${userId}`);
+    } else {
+      console.log(`👑 [OrderController] Admin detected, fetching ALL orders`);
+    }
+
+    const orders = await Order.findAll(queryOptions);
     res.json(orders);
   } catch (err) {
     console.error('❌ [OrderController] Failed to fetch orders:', err);
