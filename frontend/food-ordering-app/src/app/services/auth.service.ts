@@ -8,12 +8,14 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  // 这里的 apiUrl 可以直接写成 '/api/auth'，因为 proxy.conf.json 已经配置了转发
+  // Base API URL (proxied via proxy.conf.json)
   private apiUrl = `${environment.apiUrl}/auth`;
 
+  // Track authentication state reactively
   private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
+  // Store current user state
   private currentUserSubject = new BehaviorSubject<any>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -21,8 +23,8 @@ export class AuthService {
     private http: HttpClient,
     private cartService: CartService 
   ) {
+    // On app initialization, restore user session if token exists
     if (this.hasToken()) {
-      // 初始化时获取用户信息
       this.getProfile().subscribe({
         next: (res: any) => {
           if (res?.user) {
@@ -35,17 +37,20 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    // 这里的请求会自动变成 http://localhost:4200/api/auth/login
-    // 然后被 proxy.conf.json 转发到 http://localhost:3001/api/auth/login
+    // Request is proxied:
+    // /api/auth/login → http://localhost:3001/api/auth/login
     return this.http.post<any>(`${this.apiUrl}/login`, { email, password })
       .pipe(
         tap(res => {
           if (res?.token) {
+            // Persist token for authenticated requests
             localStorage.setItem('token', res.token);
-            // 建议存储角色前做空值校验
+
+            // Store user role (fallback to 'customer' if missing)
             const role = res.user?.role || 'customer';
             localStorage.setItem('role', role);
             
+            // Update reactive auth state
             this.loggedInSubject.next(true);
             this.currentUserSubject.next(res.user); 
           }
@@ -54,12 +59,15 @@ export class AuthService {
   }
 
   logout() {
+    // Clear authentication data
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+
+    // Reset auth state
     this.loggedInSubject.next(false);
     this.currentUserSubject.next(null);
     
-    // 清空购物车
+    // Clear cart on logout to prevent data leakage between sessions
     this.cartService.clear(); 
   }
 
@@ -71,6 +79,7 @@ export class AuthService {
     return this.http.get<any>(`${this.apiUrl}/profile`).pipe(
       tap(res => {
         if (res?.user) {
+          // Sync user state with backend response
           this.currentUserSubject.next(res.user);
         }
       })
@@ -81,6 +90,7 @@ export class AuthService {
     return this.http.put<any>(`${this.apiUrl}/profile`, data).pipe(
       tap(res => {
         if (res?.user) {
+          // Update local user state after profile update
           this.currentUserSubject.next(res.user);
         }
       })
@@ -88,10 +98,12 @@ export class AuthService {
   }
 
   setCurrentUser(user: any) {
+    // Manually update current user state
     this.currentUserSubject.next(user);
   }
 
   private hasToken(): boolean {
+    // Check if auth token exists in storage
     return !!localStorage.getItem('token');
   }
 }

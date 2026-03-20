@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   `order_id` INT(11) NOT NULL,
   `food_id` INT(11) NOT NULL,
   `quantity` INT(11) NOT NULL DEFAULT 1,
-  `price` DECIMAL(10,2) NOT NULL, -- 下单时的单价
+  `price` DECIMAL(10,2) NOT NULL, 
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order_items_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,

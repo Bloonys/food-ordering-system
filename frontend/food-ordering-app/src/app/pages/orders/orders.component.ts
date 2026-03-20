@@ -64,15 +64,15 @@ export class OrdersComponent implements OnInit, OnDestroy {
 
     const mappedOrder = {
         ...newOrder,
-        id: newOrder.orderId, // 注意：日志里是 orderId，不是 id
-        total_amount: newOrder.total, // 注意：日志里是 total，不是 total_amount
+        id: newOrder.orderId, 
+        total_amount: newOrder.total, 
         created_at: newOrder.time || new Date().toISOString(),
         isNew: true 
     };
 
     console.log('🎨 [Orders] Adding Mapped Order to UI:', mappedOrder);
 
-    // 更新流并强制回到第一页
+    // Update data stream and reset to the first page
     this.ordersSubject.next([mappedOrder, ...currentOrders]);
     this.currentPage = 1; 
     this.cdr.detectChanges();

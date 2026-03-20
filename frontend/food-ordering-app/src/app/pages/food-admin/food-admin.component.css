@@ -169,7 +169,7 @@ textarea:focus {
 .file-drop-zone label {
   display: block;
   padding: 14px;
-  border: 2px dashed #d1d5db; /* 灰色边框 */
+  border: 2px dashed #d1d5db; 
   border-radius: var(--radius);
   text-align: center;
   font-size: 16px;

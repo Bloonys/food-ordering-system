@@ -29,7 +29,7 @@ services:
     build: ./backend
     container_name: food-backend
     restart: always
-    # 🚀 显式加载 .env 文件，确保 process.env 能拿到数据
+    
     env_file:
       - ./backend/.env
     environment:

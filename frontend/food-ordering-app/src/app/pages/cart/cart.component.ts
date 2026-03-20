@@ -39,7 +39,7 @@ export class CartComponent {
     });
   }
 
-  // ✅ 编辑数量
+  // edit qquantity
   edit(entry: CartEntry) {
     const input = prompt('Enter new quantity', entry.quantity.toString());
 

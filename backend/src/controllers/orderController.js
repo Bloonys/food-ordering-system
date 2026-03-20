@@ -98,7 +98,7 @@ exports.getOrders = async (req, res) => {
       order: [['created_at', 'DESC']]
     };
 
-    // 如果不是管理员，才添加 user_id 过滤条件
+    // Only add a user_id filter if the user is not an admin
     if (role !== 'admin') {
       queryOptions.where = { user_id: userId };
       console.log(`ℹ️ [OrderController] Fetching orders for user: ${userId}`);

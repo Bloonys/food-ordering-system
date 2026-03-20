@@ -4,7 +4,7 @@ import { CartService } from '../../services/cart.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
-// 声明 google 全局变量
+// Declare global google object
 declare var google: any;
 
 @Component({
@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 1. 订阅用户信息
+    // 1. Subscribe to current user state
     this.authService.currentUser$.subscribe(userData => {
       if (userData) {
         this.user = userData;
@@ -40,21 +40,21 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    // 2. 动态加载 Google Maps 脚本，确保安全
+    // 2. Dynamically load Google Maps script (secure approach)
     this.loadGoogleMapsScript();
   }
 
   /**
-   * 安全地动态加载 Google Maps 脚本
-   * 这样你就可以从 environment 中读取 Key，而不是硬编码在 index.html 
+   * Dynamically load Google Maps script in a safe way
+   * Allows using API key from environment instead of hardcoding in index.html
    */
   loadGoogleMapsScript() {
-    // 如果脚本已经加载过，直接返回
+    // Return early if script is already loaded
     if (typeof google !== 'undefined' && google.maps) {
       return;
     }
 
-    // 检查页面是否已经有该脚本标签
+    // Check if script tag already exists
     const existingScript = document.getElementById('google-maps-script');
     if (existingScript) return;
 
@@ -87,14 +87,14 @@ export class ProfileComponent implements OnInit {
       bankCard: this.user.bankCard || ''
     };
 
-    // 等待 DOM 渲染后初始化 Autocomplete
+    // Initialize autocomplete after DOM is rendered
     setTimeout(() => {
       this.initAutocomplete();
     }, 100);
   }
 
   initAutocomplete() {
-    // 如果脚本还没加载好，稍微等一下再试
+    // Retry if Google Maps script is not fully loaded yet
     if (typeof google === 'undefined' || !google.maps || !google.maps.places) {
       setTimeout(() => this.initAutocomplete(), 200);
       return;

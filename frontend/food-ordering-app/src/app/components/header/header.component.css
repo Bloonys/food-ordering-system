@@ -50,7 +50,7 @@
 .header-row {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 左右分开 */
+  justify-content: space-between; 
 }
 
 .brand-name-container {
@@ -61,7 +61,7 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 0.5rem; /* Login 和 Cart 间距 */
+  gap: 0.5rem; 
 }
 
 
@@ -216,13 +216,12 @@
   font-weight: 500;
 }
 
-/* 移动端适配：如果屏幕太小就隐藏中间的地址，或者通过其他方式显示 */
 @media (max-width: 768px) {
   .address-container {
     display: none !important;
   }
 }
-/* Header 地址药丸样式 */
+
 .header-address-pill {
   background: #f3f3f3;
   padding: 6px 16px;
@@ -236,7 +235,6 @@
 .mode-text { font-weight: 800; color: #e11e1e; margin-right: 8px; border-right: 1px solid #ccc; padding-right: 8px; }
 .address-val { color: #2d3436; font-weight: 500; }
 
-/* 弹窗遮罩 */
 .location-modal-backdrop {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
@@ -247,7 +245,6 @@
   align-items: center;
 }
 
-/* 弹窗卡片 */
 .location-card {
   background: rgb(255, 255, 255);
   width: 90%;
@@ -279,12 +276,11 @@
   box-shadow: 0 0 8px rgba(255, 0, 0, 0.5); 
 }
 
-/* 确保父容器有定位基准 */
 .btn-icon-text.position-relative {
   position: relative !important;
 }
 
-/* 让点击手势更明显 */
+
 .cursor-pointer {
   cursor: pointer;
 }

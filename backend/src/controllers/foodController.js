@@ -4,9 +4,9 @@ const Food = require('../models/food');
 const redisClient = require('../config/redis');
 
 /**
- * 辅助函数：清除所有与食物相关的缓存
- * 由于中间件使用的 key 是 cache:/api/foods... 
- * 我们使用模糊匹配删除这些 key
+ * Helper function: Clears all food-related caches.
+ * Since the middleware uses keys like cache:/api/foods...,
+ * delete these keys using a pattern match.
  */
 const clearFoodCache = async () => {
   try {

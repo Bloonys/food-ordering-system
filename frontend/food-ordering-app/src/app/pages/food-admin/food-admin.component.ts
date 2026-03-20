@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./food-admin.component.css']
 })
 export class FoodAdminComponent implements OnInit {
-  // 🚩 将 environment 赋值给类属性，以便在 HTML 中使用
+  // Assign environment to a class property for use in the template
   apiUrl = environment.apiUrl; 
 
   foods: Food[] = [];

@@ -46,7 +46,7 @@ export class FoodCreateComponent {
     this.foodService.createFood(formData).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/foods']); // 返回列表
+        this.router.navigate(['/foods']); 
       },
       error: (err) => {
         this.loading = false;

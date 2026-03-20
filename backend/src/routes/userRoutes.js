@@ -27,11 +27,11 @@ router.post('/login', userController.login);
 // --- Protected routes (require valid JWT token) ---
 router.post('/logout', verifyToken, userController.logout);
 
-// 获取用户信息
+// Get user information
 router.get('/profile', verifyToken, userController.getProfile);
 
-// 更新用户信息 (这是新增的路由)
-// 使用 PUT 方法来符合 RESTful 规范，对应 userController.updateProfile
+// Update user information (newly added route)
+// Use PUT to follow RESTful conventions, handled by userController.updateProfile
 router.put('/profile', verifyToken, userController.updateProfile);
 
 module.exports = router;

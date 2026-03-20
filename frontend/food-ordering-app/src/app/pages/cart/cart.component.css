@@ -82,7 +82,7 @@
 }
 
 /* =========================
-   信息
+   information
 ========================= */
 .item-info {
   flex: 1;
@@ -118,7 +118,7 @@
   color: #d63031;
 }
 
-/* 删除按钮 */
+/* delete */
 .btn-remove {
   background: none;
   border: 1px solid #faa0a0;
@@ -136,7 +136,7 @@
   border-color: #ff7575;
 }
 
-/* 编辑按钮 */
+/* edit */
 .btn-edit {
   background: #fff1f1;
   border: 1px solid #ffc8c8;
@@ -179,7 +179,7 @@
   gap: 1rem;
 }
 
-/* 清空按钮 */
+/* clear */
 .btn-clear {
   background: #f1f2f6;
   border: none;
@@ -195,7 +195,7 @@
   background: #dfe4ea;
 }
 
-/* 结账按钮 */
+/* check out */
 .btn-checkout {
   background: #e62222;
   border: none;
@@ -269,7 +269,7 @@
   transform: translateY(0);
 }
 
-/* 底部“继续购物”按钮样式 */
+/* continue shopping button */
 .btn-continue {
   background: transparent;
   border: 1px solid #ddd;
