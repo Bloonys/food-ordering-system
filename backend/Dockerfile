@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-# 建构工具
+# Install build tools (required for some npm packages)
 RUN apk add --no-cache python3 make g++
 
 WORKDIR /usr/src/app
